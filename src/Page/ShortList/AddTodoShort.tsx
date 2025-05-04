@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import { Plus, CheckCircle, AlertCircle, Tag, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,13 +14,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { shortTodoContainerAtom, ShortTodoJ } from "@/state";
 import { useAtom } from "jotai";
 
-export default function AddTodoShort({ tid }: {tid?:string}) {
+export default function AddTodoShort({ tid }: { tid?: string }) {
   const [shortArray, setShortArray] = useAtom(shortTodoContainerAtom);
   const [newTask, setNewTask] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [priority, setPriority] = React.useState("");
   const [tag, setTag] = React.useState("");
   const [settings, setSettings] = React.useState("");
+  
+  useEffect(() => {
+    alert("edit stated",tid);
+  }, [tid]);
 
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +54,7 @@ export default function AddTodoShort({ tid }: {tid?:string}) {
 
         return con;
       });
-      
+
       setShortArray(updatedTodoArrayNow);
 
       setNewTask("");
@@ -57,7 +62,6 @@ export default function AddTodoShort({ tid }: {tid?:string}) {
       setPriority("");
       setTag("");
       setSettings("");
-      
     }
 
     console.log(shortArray);

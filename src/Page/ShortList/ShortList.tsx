@@ -65,14 +65,15 @@ const ShortList = () => {
       />
 
       {todoView == "block" ? (
-        <div className="w-full  h-[70%] flex gap-5">
+        <div className="w-full  h-[70%] flex gap-5 ">
           {" "}
           <div className="_table rounded-lg border h-full  overflow-hidden shadow-gray-800 w-2/3">
             <ShortTaskHead />
-            <div className="overflow-y-auto h-full scrollbar-custom">
+            <div className="overflow-y-auto h-full scrollbar-custom bg-whit pb-10">
               {shortTaskS.map((e, index) => {
                 return <ShortTask key={index} num={index} comp={e} />;
               })}
+              <div className=" mb-20 ">end here</div>
             </div>
           </div>
           <div className="_table rounded-lg border h-full overflow-hidden shadow-gray-800 w-1/3 gap-5">

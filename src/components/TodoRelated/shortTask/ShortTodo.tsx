@@ -90,7 +90,7 @@ const ShortTodo: React.FC<{
               <Link to={`/shortList/${id}`}>
                 <ScanSearch className="cursor-pointer hover:bg-gray-800 rounded-sm" />
               </Link>
-              <ShortAction />
+              <ShortAction taid={id} />
             </div>
           </div>
           <Button onClick={handleShortAdd}>Add</Button>
