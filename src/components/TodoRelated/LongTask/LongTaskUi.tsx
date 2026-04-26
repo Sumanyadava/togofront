@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { LongTodoJ } from "@/state";
 
 interface LongTaskUiProps {
-  long: LongTodoJ; // Define props interface
+  long: LongTodoJ;
+  containerId: number;
 }
 
-const LongTaskUi: React.FC<LongTaskUiProps> = ({ long }) => {
+const LongTaskUi: React.FC<LongTaskUiProps> = ({ long, containerId }) => {
   const [deadlineWidth, setDeadlineWidth] = useState(60)
   const [mileShow, setMileShow] = useState(false);
 
@@ -64,6 +65,8 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({ long }) => {
     return daysLeft >= 0 ? daysLeft : 0; // Return 0 if the date has passed
   }
   
+
+  // console.log(long);
   
 
   return (
@@ -103,8 +106,11 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({ long }) => {
           mileShow ? "visible max-h-40 opacity-100" : "invisible max-h-0 opacity-0"
         }`}
       >
-        <Link to={`/LongProjects/${long.id}`} className="text-white">
-          {long.milestone || "Expand"}
+        <Link
+          to={`/LongProjects/${containerId}/task/${long.id}`}
+          className="text-white hover:underline"
+        >
+          {long.milestone || "Expand →"}
         </Link>
       </div>
     </div>

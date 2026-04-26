@@ -2,14 +2,14 @@ import React from 'react';
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils"
 
-interface EyeCatchingButtonProps {
+interface EyeCatchingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: string;
-  className?: string;
 }
 
-export const EyeCatchingButton_v2: React.FC<EyeCatchingButtonProps> = ({ children, className }) => {
+export const EyeCatchingButton_v2: React.FC<EyeCatchingButtonProps> = ({ children, className, ...props }) => {
   return (
     <Button
+      {...props}
       className={cn(
         'animate-bg-shine border-[1px] rounded-lg  bg-[length:200%_100%] tracking-wide font-bold text-lg',
         // 'dark:bg-[linear-gradient(110deg,#09090B,45%,#27272A,55%,#09090B)] dark:text-zinc-200 dark:border-zinc-800',

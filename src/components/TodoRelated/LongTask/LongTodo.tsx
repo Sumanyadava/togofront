@@ -21,7 +21,7 @@ const LongTodo: React.FC<{
   const [longText, setLongText] = useState("");
   const [LongTaskS, setLongTaskS] = useState<LongTodoJ[]>([]);
   const [TagDaTa, setTagDaTa] = useState("");
-  const [DeadlineState, setDeadlineState] = useState<Date>();
+  const [DeadlineState, setDeadlineState] = useState<Date | null>(null);
 
   const [LongTodoArray, setLongTodoArray] = useAtom(LongTodoContainerAtom);
 
@@ -31,11 +31,13 @@ const LongTodo: React.FC<{
     setLongTaskS(LongArray ? LongArray?.LongTodo : []);
   }, [LongTodoArray, id]);
 
+  
+
   const handleTag = (data: string) => {
     setTagDaTa(data);
   };
 
-  const handleDeadline = (data: Date) => {
+  const handleDeadline = (data: Date | null) => {
     setDeadlineState(data);
   };
 
@@ -118,7 +120,7 @@ const LongTodo: React.FC<{
       </CardHeader>
       <CardContent className="scrollbar-custom overflow-y-scroll h-[250px] ">
         {LongTaskS.map((long) => {
-          return <LongTaskUi key={long.id} long={long} />;
+          return <LongTaskUi key={long.id} long={long} containerId={id} />;
         })}
       </CardContent>
     </Card>

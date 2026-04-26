@@ -15,17 +15,37 @@ import { useEffect, useState } from "react";
 export default function Cal2({
   handleDeadline,
 }: {
-  handleDeadline: (data: Date) => void;
+  handleDeadline: (data: Date | null) => void;
 }) {
-  const [date, setDate] = useState<Date | undefined>(startOfDay(new Date()));
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [noDeadline, setNoDeadline] = useState(false);
+
   useEffect(() => {
-    if (date) {
+    if (noDeadline) {
+      handleDeadline(null);
+    } else if (date) {
       handleDeadline(date);
     }
-  }, [date, handleDeadline]);
+  }, [date, noDeadline, handleDeadline]);
+
+//no deadline is today
+  const handleQuickSelect = (label: string, d: Date) => {
+    if (label === "No") {
+      setNoDeadline(true);
+      setDate(undefined);
+    } else {
+      setNoDeadline(false);
+      setDate(d);
+    }
+  };
+
+  const handleCalendarSelect = (d: Date | undefined) => {
+    setNoDeadline(false);
+    setDate(d);
+  };
 
   const quickSelectDates = [
-    { label: "Today", date: startOfDay(new Date()) },
+    { label: "No", date: startOfDay(new Date()) },
     { label: "Tom", date: addDays(startOfDay(new Date()), 1) },
     { label: "3 Days", date: addDays(startOfDay(new Date()), 3) },
     { label: "1 Week", date: addWeeks(startOfDay(new Date()), 1) },
@@ -54,7 +74,7 @@ export default function Cal2({
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={handleCalendarSelect}
             disabled={(date) => date < startOfDay(new Date())}
           />
         </PopoverContent>
@@ -65,8 +85,16 @@ export default function Cal2({
           <Button
             key={quickDate.label}
             variant="outline"
-            className="w-full text-gray-400"
-            onClick={() => setDate(quickDate.date)}
+            className={`w-full ${
+              quickDate.label === "Today"
+                ? noDeadline
+                  ? "border-primary text-primary"
+                  : "text-gray-400"
+                : !noDeadline && date && date.toDateString() === quickDate.date.toDateString()
+                  ? "border-primary text-primary"
+                  : "text-gray-400"
+            }`}
+            onClick={() => handleQuickSelect(quickDate.label, quickDate.date)}
           >
             {quickDate.label}
           </Button>
@@ -76,7 +104,11 @@ export default function Cal2({
       <div className="text-center">
         <p className="text-md text-gray-600 font-semibold">Selected Date:</p>
         <p className="text-xl">
-          {date ? format(date, "PP") : "No date selected"}
+          {noDeadline
+            ? <span className="text-muted-foreground italic">No Deadline</span>
+            : date
+            ? format(date, "PP")
+            : "No date selected"}
         </p>
       </div>
     </div>

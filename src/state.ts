@@ -1,6 +1,9 @@
 // import { id } from "date-fns/locale";
 
-import { atom } from "jotai";
+import { atom, getDefaultStore } from "jotai";
+import { collection, getDocs } from "firebase/firestore";
+//@ts-ignore
+import {db, auth} from '../firebase.js'
 
 
 export interface ShortTodoContainer {
@@ -8,8 +11,11 @@ export interface ShortTodoContainer {
     shortContainername: string;
     shortTodos: ShortTodoJ[];
     completed: boolean;
+    hidden?: boolean;
+    createdAt: Date;
+    Notes:string;
   }
-
+//short Todo Jobs (mini task)
   export interface ShortTodoJ {
     id:number,
     shortTodoName: string,
@@ -18,26 +24,10 @@ export interface ShortTodoContainer {
     status: string;
     priority: string;
     createdAt: Date;
+    hidden?: boolean;
   }
 
-export const shortTodoContainerAtom = atom<ShortTodoContainer[]>([
-    {
-        id: 1,
-        shortContainername: 'Example ShortTodo Container',
-        shortTodos: [
-          {
-            id:11,
-            shortTodoName: 'Example Task',
-            completed: false,
-            tag: 'Work',
-            status: 'In Progress',
-            priority: 'High',
-            createdAt: new Date(),
-          },
-        ],
-        completed: false,
-      },
-])
+export const shortTodoContainerAtom = atom<ShortTodoContainer[]>([]);
 
 export interface LongTodoContainer {
   id: number;
@@ -47,6 +37,7 @@ export interface LongTodoContainer {
 
   
 }
+//Long Todo Jobs (big task)
 
 export interface LongTodoJ{
   id: number;
@@ -59,42 +50,14 @@ export interface LongTodoJ{
   createedAt:Date;
   
 }
-export const LongTodoContainerAtom = atom<LongTodoContainer[]>([
-  {
-    id: 1,
-    LongContainerName: "Project Alpha",
-    LongTodo: [
-      {
-        id: 1,
-        LongTodoName: "Initial Research",
-        deadline: new Date("2024-12-01"),
-        tag: "Research",
-        completed: false,
-        milestone: "Research Phase 1",
-        planText: "Complete background research and gather relevant sources.",
-        createedAt: new Date("2024-10-01")
-      },
-      {
-        id: 2,
-        LongTodoName: "Planning Stage",
-        deadline: new Date("2024-12-30"),
-        tag: "Planning",
-        completed: false,
-        milestone: "Planning Phase",
-        planText: "Outline project plan and key deliverables.",
-        createedAt: new Date("2024-11-01")
-      }
-    ],
-    completed: false
-  },
-])
+
+export const LongTodoContainerAtom = atom<LongTodoContainer[]>([]);
 
 
 
 
 
 //daily todo
-
 export interface DailyTodo {
   id: number;
   DailyName: string;
@@ -120,3 +83,48 @@ export const dailyTodoContainerAtom = atom<DailyTodo[]>([
     completed: false,
   },
 ],);
+
+
+// ── Firebase fetch: called once after login ──
+const store = getDefaultStore();
+
+export const fetchAllFromFirebase = async () => {
+  const userId = auth.currentUser?.uid;
+  if (!userId) return;
+
+  // Short containers
+  const shortSnap = await getDocs(collection(db, `users/${userId}/shortTodoContainers`));
+  const shortData: ShortTodoContainer[] = shortSnap.docs.map(doc => {
+    const item = doc.data() as ShortTodoContainer;
+    if (item.shortTodos) {
+      item.shortTodos = item.shortTodos.map((t: any) => ({
+        ...t,
+        createdAt: t.createdAt?.toDate ? t.createdAt.toDate() : t.createdAt ?? new Date()
+      }));
+    }
+    return item;
+  });
+  store.set(shortTodoContainerAtom, shortData);
+
+
+  // Long containers
+  const longSnap = await getDocs(collection(db, `users/${userId}/longTodoContainers`));
+  const longData: LongTodoContainer[] = longSnap.docs.map(doc => {
+    const item = doc.data() as LongTodoContainer;
+    if (item.LongTodo) {
+      item.LongTodo = item.LongTodo.map((t: any) => ({
+        ...t,
+        deadline: t.deadline?.toDate ? t.deadline.toDate() : t.deadline,
+        createedAt: t.createedAt?.toDate ? t.createedAt.toDate() : t.createedAt ?? new Date()
+      }));
+    }
+    return item;
+  });
+  store.set(LongTodoContainerAtom, longData);
+
+  
+  // Daily todos
+  const dailySnap = await getDocs(collection(db, `users/${userId}/dailyTodos`));
+  const dailyData: DailyTodo[] = dailySnap.docs.map(doc => doc.data() as DailyTodo);
+  store.set(dailyTodoContainerAtom, dailyData);
+};

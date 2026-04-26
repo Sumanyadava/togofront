@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import TaskUi from "@/components/TodoRelated/TaskUi";
+import TaskUi from "@/components/TodoRelated/ShortTaskUi";
 import LongTaskUi from "@/components/TodoRelated/LongTask/LongTaskUi";
 
 export default function CurrentlyWorking() {

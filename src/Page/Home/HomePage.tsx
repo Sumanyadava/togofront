@@ -7,18 +7,7 @@ import ChallengeTimer from "@/components/ChallengeTimer";
 import LongTodo from "@/components/TodoRelated/LongTask/LongTodo";
 
 import HeaderHome from "./components/HeaderHome";
-import {
-  ArrowBigDown,
-  ArrowDown,
-  ArrowDown10Icon,
-  ArrowDownCircle,
-  ArrowUp01,
-  ArrowUp01Icon,
-  ArrowUpAZ,
-  ArrowUpCircle,
-  Cross,
-  LucideArrowUp01,
-} from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
