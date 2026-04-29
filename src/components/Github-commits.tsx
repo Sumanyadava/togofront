@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 // Function to generate a range of dates for the grid
 const generateDateRange = (days: number) => {
@@ -15,7 +15,7 @@ const generateDateRange = (days: number) => {
 
 const ContributionHeatmap = () => {
   const [timeRange, setTimeRange] = useState("week");
-  const timeRangeMapping = {
+  const timeRangeMapping: Record<string, number> = {
     week: 7,
     month: 30,
     year: 365,

@@ -31,7 +31,7 @@ const PublicRoute = ({ children, user }: { children: JSX.Element; user: User | n
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isDark, setIsDark] = useState(() => {
+  const [isDark] = useState(() => {
     return localStorage.getItem("theme") === "true";
   });
 

@@ -2,7 +2,7 @@
 
 import Searchbar from "@/components/Searchbar";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Popover,
@@ -12,8 +12,8 @@ import {
 import { Habbits } from "./Habbits";
 import { AvatarWithNotification } from "@/components/ui/avatar-with-notification";
 
-import LongTaskUi from "@/components/TodoRelated/LongTask/LongTaskUi";
-import ShortTaskUi from "@/components/TodoRelated/ShortTaskUi";
+// import LongTaskUi from "@/components/TodoRelated/LongTask/LongTaskUi";
+// import ShortTaskUi from "@/components/TodoRelated/ShortTaskUi";
 import { LogOut, User as UserIcon, Settings, Bell } from "lucide-react";
 import { signOut } from "firebase/auth";
 // @ts-ignore
@@ -66,8 +66,7 @@ const HeaderHome = () => {
           </PopoverTrigger>
           <PopoverContent>
             Habbits -{/* <LongTaskUi /> */}
-            <ShortTaskUi task_name={"hey"} isChecked={true} isEditable={false} />
-            <ShortTaskUi task_name={"hey"} isChecked={true} isEditable={false} />
+            
             {/* <LongTaskUi /> */}
             go full
           </PopoverContent>

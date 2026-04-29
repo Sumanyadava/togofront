@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tag, Timer, TimerOff } from "lucide-react";
+import { Tag, TimerOff } from "lucide-react";
 
 interface TagLongProps {
   handleTag: (data: string) => void;

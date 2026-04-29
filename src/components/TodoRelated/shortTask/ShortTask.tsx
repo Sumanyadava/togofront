@@ -5,7 +5,7 @@ import { ShortAction } from "./ShortAction";
 import { format } from 'date-fns';
 import { ShortTodoJ } from "@/state";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X, Pen, ChevronDown, GripVertical } from "lucide-react";
+import { Check, X, GripVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

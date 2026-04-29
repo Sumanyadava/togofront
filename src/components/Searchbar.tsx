@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import {shortTodoContainerAtom , ShortTodoContainer, LongTodoContainerAtom, LongTodoContainer} from '.././state'
 import { useAtom } from 'jotai'
@@ -12,8 +12,8 @@ import { toast } from 'sonner'
 const Searchbar = () => {
 
   const [searchText, setSearchText] = useState('')
-  const [shortContainers, setShortContainers] = useAtom(shortTodoContainerAtom);
-  const [LongContainers, setLongContainers] = useAtom(LongTodoContainerAtom)
+  const [, setShortContainers] = useAtom(shortTodoContainerAtom);
+  const [, setLongContainers] = useAtom(LongTodoContainerAtom)
 
 
   const handleShortContainer = () => {

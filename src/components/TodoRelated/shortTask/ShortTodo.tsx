@@ -4,7 +4,6 @@ import { Button } from "../../ui/button";
 import ShortTaskUi from "../ShortTaskUi";
 import { ScanSearch, Trash2, Edit3, X, Check } from "lucide-react";
 import { useAtom } from "jotai";
-import { ShortAction } from "./ShortAction";
 import { AnimatePresence, motion } from "framer-motion";
 import { shortTodoContainerAtom, ShortTodoJ, ShortTodoContainer } from "@/state";
 import { Link } from "react-router-dom";

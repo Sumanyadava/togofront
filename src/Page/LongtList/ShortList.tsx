@@ -11,7 +11,7 @@ import {
   ArrowLeft,
   CheckCircle2,
   Circle,
-  AlertCircle,
+  // AlertCircle,
   Pen,
   Plus,
   Check,
@@ -20,7 +20,7 @@ import {
   EyeOff,
   Search,
   ArrowUpDown,
-  GripVertical
+  // GripVertical
 } from "lucide-react";
 import ShortTask from "@/components/TodoRelated/shortTask/ShortTask";
 import ShortTaskHead from "@/components/TodoRelated/shortTask/ShortTaskHead";

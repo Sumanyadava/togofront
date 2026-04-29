@@ -1,7 +1,7 @@
 "use client";
 import LongTaskUi from "@/components/TodoRelated/LongTask/LongTaskUi";
 import { useEffect, useState } from "react";
-import AddTodoLong from "./AddTodoLong";
+// import AddTodoLong from "./AddTodoLong";
 import { Button } from "@/components/ui/button";
 import { Link, useParams } from "react-router-dom";
 import { useAtom } from "jotai";
@@ -10,14 +10,14 @@ import {
   LongTodoContainerAtom,
   LongTodoJ,
 } from "@/state";
-import { Pen, Calendar } from "lucide-react";
+import { Pen} from "lucide-react";
 
 const LongList = () => {
-  const [todoView, setTodoView] = useState<String>("block");
+  const [todoView] = useState<String>("block");
 
   const { containerId } = useParams();
 
-  const [longTodoArray, setLongTodoArray] = useAtom<LongTodoContainer[]>(
+  const [longTodoArray] = useAtom<LongTodoContainer[]>(
     LongTodoContainerAtom
   );
 

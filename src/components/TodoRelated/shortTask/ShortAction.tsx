@@ -17,7 +17,7 @@ interface ShortActionProps {
   onHide?: () => void;
 }
 
-export function ShortAction({ taid, isHidden, onDelete, onHide }: ShortActionProps) {
+export function ShortAction({ isHidden, onDelete, onHide }: ShortActionProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

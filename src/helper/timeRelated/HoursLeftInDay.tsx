@@ -1,6 +1,6 @@
 import { timeLeftInTodayAtom } from '@/stateHelper';
-import { atom, useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
+import React, { useEffect } from 'react';
 
 interface HoursLeftInDayProps {
   timeZone?: string;

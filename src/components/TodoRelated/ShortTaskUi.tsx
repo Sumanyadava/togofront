@@ -5,7 +5,7 @@ import {
   Check,
   X,
 } from "lucide-react";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { toast } from "sonner";
 import useLongPress from "@/hooks/useLongpress";

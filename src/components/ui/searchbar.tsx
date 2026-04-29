@@ -8,7 +8,7 @@ function SearchBar() {
     setIsFocused(true);
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (e.target.value === "") {
       setIsFocused(false);
     }

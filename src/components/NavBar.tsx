@@ -10,10 +10,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "./ui/button";
-Button;
-import { Input } from "@/components/ui/input";
-import Searchbar from "./Searchbar";
-import { Radar, House, icons, Timer, Book } from "lucide-react";
+import { Radar, House, Timer, Book } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const navlink = [

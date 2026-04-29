@@ -21,7 +21,7 @@ const useLongPress = <T extends HTMLElement = HTMLElement>(
   );
 
   const clear = useCallback(
-    (e: Event) => {
+    (_e: Event) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
