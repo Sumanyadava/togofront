@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAtom } from "jotai";
-import { LongTodoContainerAtom, LongTodoJ } from "@/state";
+import { LongTodoContainerAtom, LongTodoJ } from "@/state/state";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import {

@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { onAuthStateChanged, User } from "firebase/auth";
-// @ts-ignore
-import { auth } from "../firebase";
-import { fetchAllFromFirebase } from "./state";
+import { auth } from "./firebase";
+import { fetchAllFromFirebase } from "./state/state";
 
-import ShortList from "@/Page/LongtList/ShortList";
-import HomePage from "@/Page/Home/HomePage";
-import NavBar from "./components/NavBar";
+import HomePage from "@/pages/home-page/HomePage";
+import NavBar from "@/components/NavBar";
 import { Toaster } from "sonner";
 
-import Signup from "./Page/Signups/Signup";
-import Login from "./Page/Signups/Login";
-import LongList from "./Page/LongtList/LongList";
-import LongTaskDetail from "./Page/LongtList/LongTaskDetail";
-import TimerApp from "./Page/TimerApp/TimerApp";
+import Signup from "@/pages/auth-page/Signup";
+import Login from "@/pages/auth-page/Login";
+import LongList from "@/pages/long-list-page/LongList";
+import LongTaskDetail from "@/pages/long-list-page/LongTaskDetail";
+import TimerApp from "@/pages/timer-page/TimerApp";
+import ShortList from "@/pages/short-list-page/ShortList";
 
 // ── Protect private routes ──
 const ProtectedRoute = ({ children, user }: { children: JSX.Element; user: User | null }) => {

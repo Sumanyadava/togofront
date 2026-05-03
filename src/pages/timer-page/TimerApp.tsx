@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-// @ts-ignore
-import { storage, db } from "../../../firebase.js";
+import { storage, db } from "@/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "firebase/firestore";
 import { Upload, Image as ImageIcon, Loader2, Plus } from "lucide-react";

@@ -1,5 +1,5 @@
 "use client";
-import LongTaskUi from "@/components/TodoRelated/LongTask/LongTaskUi";
+import LongTaskUi from "@/pages/home-page/components/todo-related/long-todo/LongTaskUi";
 import { useEffect, useState } from "react";
 // import AddTodoLong from "./AddTodoLong";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import {
   LongTodoContainer,
   LongTodoContainerAtom,
   LongTodoJ,
-} from "@/state";
+} from "@/state/state";
 import { Pen} from "lucide-react";
 
 const LongList = () => {

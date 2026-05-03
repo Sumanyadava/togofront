@@ -16,8 +16,7 @@ import { AvatarWithNotification } from "@/components/ui/avatar-with-notification
 // import ShortTaskUi from "@/components/TodoRelated/ShortTaskUi";
 import { LogOut, User as UserIcon, Settings, Bell } from "lucide-react";
 import { signOut } from "firebase/auth";
-// @ts-ignore
-import { auth } from "../../../../firebase";
+import { auth } from "@/firebase";
 
 const HeaderHome = () => {
   const [isDark, setIsDark] = useState(() => {

@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Button } from './ui/button'
-import {shortTodoContainerAtom , ShortTodoContainer, LongTodoContainerAtom, LongTodoContainer} from '.././state'
+import {shortTodoContainerAtom , ShortTodoContainer, LongTodoContainerAtom, LongTodoContainer} from '../state/state'
 import { useAtom } from 'jotai'
-// @ts-ignore
-import {db, auth} from '../../firebase.js'
+import {db, auth} from '@/firebase'
 import { collection, addDoc } from 'firebase/firestore'
 import { toast } from 'sonner'
 

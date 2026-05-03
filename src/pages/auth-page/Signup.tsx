@@ -4,8 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, ArrowRight, Sparkles } from "lucide-react";
-// @ts-ignore
-import { auth } from "../../../firebase.js";
+import { auth } from "@/firebase";
 import { 
   createUserWithEmailAndPassword, 
   updateProfile, 

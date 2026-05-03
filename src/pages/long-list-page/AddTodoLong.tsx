@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { LongTodoContainerAtom, LongTodoJ } from "@/state";
+import { LongTodoContainerAtom, LongTodoJ } from "@/state/state";
 import { useAtom } from "jotai";
 
 export default function AddTodoLong({ tid }: { tid?: string }) {

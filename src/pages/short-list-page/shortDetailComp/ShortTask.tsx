@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Checkbox } from "../../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { ShortAction } from "./ShortAction";
 import { format } from 'date-fns';
-import { ShortTodoJ } from "@/state";
+import { ShortTodoJ } from "@/state/state";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, X, GripVertical } from "lucide-react";
 import {
@@ -35,10 +35,17 @@ const ShortTask: React.FC<ShortTaskProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(comp.shortTodoName);
+  const [tempDesc, setTempDesc] = useState(comp.description || "");
 
   const handleRenameConfirm = () => {
-    if (tempName.trim() && tempName !== comp.shortTodoName) {
-      onRename(tempName.trim());
+    const nameChanged = tempName.trim() && tempName !== comp.shortTodoName;
+    const descChanged = tempDesc.trim() !== (comp.description || "");
+    
+    if (nameChanged || descChanged) {
+      onUpdate({ 
+        shortTodoName: tempName.trim() || comp.shortTodoName, 
+        description: tempDesc.trim() || undefined 
+      });
     }
     setIsEditing(false);
   };
@@ -88,7 +95,7 @@ const ShortTask: React.FC<ShortTaskProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-2"
+              className="flex flex-col gap-2"
             >
               <input
                 autoFocus
@@ -98,14 +105,20 @@ const ShortTask: React.FC<ShortTaskProps> = ({
                   if (e.key === "Enter") handleRenameConfirm();
                   if (e.key === "Escape") setIsEditing(false);
                 }}
-                className="flex-1 bg-black/40 text-sm px-2 py-1 rounded-lg outline-none border border-white/10 focus:border-white/30"
+                className="w-full bg-black/40 text-sm px-2 py-1 rounded-lg outline-none border border-white/10 focus:border-white/30"
               />
-              <div className="flex gap-1">
-                 <button onClick={handleRenameConfirm} className="p-1.5 rounded-lg bg-white text-black hover:bg-white/90">
-                    <Check size={14} />
+              <textarea
+                value={tempDesc}
+                onChange={(e) => setTempDesc(e.target.value)}
+                placeholder="Description (optional)"
+                className="w-full bg-black/40 text-xs px-2 py-1 rounded-lg outline-none border border-white/10 focus:border-white/30 min-h-[40px] resize-none"
+              />
+              <div className="flex justify-end gap-1">
+                 <button onClick={() => setIsEditing(false)} className="px-3 py-1 text-[10px] rounded-lg bg-white/5 text-white/40 hover:bg-white/10">
+                    Cancel
                  </button>
-                 <button onClick={() => setIsEditing(false)} className="p-1.5 rounded-lg bg-white/5 text-white/40 hover:bg-white/10">
-                    <X size={14} />
+                 <button onClick={handleRenameConfirm} className="px-3 py-1 text-[10px] rounded-lg bg-white text-black hover:bg-white/90">
+                    Save Changes
                  </button>
               </div>
             </motion.div>
@@ -121,8 +134,15 @@ const ShortTask: React.FC<ShortTaskProps> = ({
                 }`}>
                   {comp.shortTodoName}
                 </p>
+                {comp.description && (
+                  <p className={`text-[11px] line-clamp-1 transition-all ${
+                    comp.completed ? "text-white/10" : "text-white/30"
+                  }`}>
+                    {comp.description}
+                  </p>
+                )}
                 {comp.hidden && (
-                  <Badge className="text-[9px] bg-white/5 border-white/10 text-white/30 tracking-wider font-semibold py-0 px-1.5 rounded-md">Hidden</Badge>
+                  <Badge className="text-[9px] bg-white/5 border-white/10 text-white/30 tracking-wider font-semibold py-0 px-1.5 rounded-md w-fit">Hidden</Badge>
                 )}
               </div>
               
@@ -142,7 +162,7 @@ const ShortTask: React.FC<ShortTaskProps> = ({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="bg-black/90 backdrop-blur-xl border-white/10 text-white rounded-xl shadow-2xl">
                        {statuses.map(s => (
-                          <DropdownMenuItem key={s} onClick={(e) => { e.stopPropagation(); onUpdate({ status: s }); }} className="focus:bg-white focus:text-black font-medium text-xs px-4 py-2 cursor-pointer">
+                          <DropdownMenuItem key={s} onClick={(e) => { e.stopPropagation(); onUpdate({ status: s, completed: s === "Done" }); }} className="focus:bg-white focus:text-black font-medium text-xs px-4 py-2 cursor-pointer">
                              {s}
                           </DropdownMenuItem>
                        ))}
@@ -168,11 +188,7 @@ const ShortTask: React.FC<ShortTaskProps> = ({
                  </DropdownMenu>
               </div>
 
-              {comp.tag && (
-                <div className="hidden sm:flex items-center gap-2">
-                  <span className="text-[9px] font-medium text-white/10">{comp.tag}</span>
-                </div>
-              )}
+             
             </motion.div>
           )}
         </AnimatePresence>
@@ -195,7 +211,7 @@ const ShortTask: React.FC<ShortTaskProps> = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-black/90 backdrop-blur-xl border-white/10 text-white rounded-xl shadow-2xl">
             {statuses.map(s => (
-              <DropdownMenuItem key={s} onClick={() => onUpdate({ status: s })} className="focus:bg-white focus:text-black font-medium text-xs px-4 py-2 cursor-pointer">
+              <DropdownMenuItem key={s} onClick={() => onUpdate({ status: s, completed: s === "Done" })} className="focus:bg-white focus:text-black font-medium text-xs px-4 py-2 cursor-pointer">
                 {s}
               </DropdownMenuItem>
             ))}

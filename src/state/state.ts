@@ -2,8 +2,7 @@
 
 import { atom, getDefaultStore } from "jotai";
 import { collection, getDocs } from "firebase/firestore";
-//@ts-ignore
-import {db, auth} from '../firebase.js'
+import {db, auth} from '@/firebase'
 
 
 export interface ShortTodoContainer {
@@ -19,6 +18,7 @@ export interface ShortTodoContainer {
   export interface ShortTodoJ {
     id:number,
     shortTodoName: string,
+    description?: string,
     completed:boolean,
     tag: string;
     status: string;

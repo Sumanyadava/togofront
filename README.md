@@ -81,6 +81,10 @@ Visit `http://localhost:5173` to see the app in action!
 - **Sonner** - Toast notifications
 
 ## 📁 Project Structure
+### naming conviention
+- kebab case folder
+- Pascal case component name, = PagesDivided.tsx
+
 
 ```
 src/

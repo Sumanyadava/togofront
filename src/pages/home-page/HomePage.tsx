@@ -2,28 +2,30 @@ import { useState } from "react";
 import CurrentlyWorking from "./components/CurrentlyWorking";
 
 import TodayCard from "@/components/TodayCard";
-import ShortTodo from "@/components/TodoRelated/shortTask/ShortTodo";
+import ShortTodo from "./components/todo-related/short-todo/ShortTodo";
 import ChallengeTimer from "@/components/ChallengeTimer";
-import LongTodo from "@/components/TodoRelated/LongTask/LongTodo";
+import LongTodo from "./components/todo-related/long-todo/LongTodo";
 
 import HeaderHome from "./components/HeaderHome";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
-import { LongTodoContainerAtom, shortTodoContainerAtom } from "@/state";
+import { LongTodoContainerAtom, shortTodoContainerAtom } from "@/state/state";
+
 
 const HomePage = () => {
-  const [headerHeight, setHeaderHeight] = useState(() => {
-    return localStorage.getItem("header") === "true";
-  });
 
+
+  const [headerHeight, setHeaderHeight] = useState(() => {return localStorage.getItem("header") === "true";});
   const [shortTodoContainers] = useAtom(shortTodoContainerAtom);
   const [LongTodoContainer] = useAtom(LongTodoContainerAtom);
+
 
   return (
     <div className="text-lg h-screen ">
       <HeaderHome />
+
 
       {/* main  */}
       <div className="body_here   flex flex-wrap gap-4 justify-center   ">
@@ -67,16 +69,19 @@ const HomePage = () => {
           );
         })}
 
-{
-  LongTodoContainer.map((ele,index) => {
-    return (
-      <LongTodo key={index} id={ele.id} LongContainerName={ele.LongContainerName} />
-    )
-  })
-}
+        {LongTodoContainer.map((ele, index) => {
+          return (
+            <LongTodo
+              key={index}
+              id={ele.id}
+              LongContainerName={ele.LongContainerName}
+            />
+          );
+        })}
       
         
       </div>
+
 
       <div className=" right-10 bottom-20 fixed mb-1">
         <TodayCard />

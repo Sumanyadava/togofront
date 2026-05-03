@@ -7,19 +7,8 @@ import { EyeCatchingButton_v2 } from "@/components/EyeCatching/VButtons";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.07, duration: 0.35, ease: "easeOut" },
-  }),
-};
-
 import { useState } from "react";
-// @ts-ignore
-import { auth } from "../../../firebase";
+import { auth } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
   GoogleAuthProvider, 
@@ -31,11 +20,24 @@ import {
 } from "firebase/auth";
 
 export default function Login() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+
+
+  
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.07, duration: 0.35, ease: "easeOut" },
+  }),
+};
+
 
   const handleLogin = async () => {
     if (!email || !password) {

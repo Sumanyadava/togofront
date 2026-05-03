@@ -5,7 +5,7 @@ import {
   ShortTodoContainer,
   shortTodoContainerAtom,
   ShortTodoJ,
-} from "@/state";
+} from "@/state/state";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
@@ -22,10 +22,9 @@ import {
   ArrowUpDown,
   // GripVertical
 } from "lucide-react";
-import ShortTask from "@/components/TodoRelated/shortTask/ShortTask";
-import ShortTaskHead from "@/components/TodoRelated/shortTask/ShortTaskHead";
-// @ts-ignore
-import { db, auth } from '../../../firebase';
+import ShortTask from "./shortDetailComp/ShortTask";
+import ShortTaskHead from "./shortDetailComp/ShortTaskHead";
+import { db, auth } from '@/firebase';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { toast } from 'sonner';
 import { motion, AnimatePresence, Reorder } from "framer-motion";
@@ -51,6 +50,7 @@ const ShortList = () => {
   const [containerName, setContainerName] = useState("");
   const [notes, setNotes] = useState("");
   const [newTask, setNewTask] = useState("");
+  const [newDescription, setNewDescription] = useState("");
   
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [tempTitle, setTempTitle] = useState("");
@@ -169,6 +169,7 @@ const ShortList = () => {
     const task: ShortTodoJ = {
       id: Date.now(),
       shortTodoName: trimmed,
+      description: newDescription.trim() || undefined,
       completed: false,
       tag: "Priority",
       status: "In Progress",
@@ -182,6 +183,7 @@ const ShortList = () => {
       shortTodos: [task, ...(c.shortTodos || [])]
     }));
     setNewTask("");
+    setNewDescription("");
     setIsAddingTask(false);
     toast.success("Task added");
   };
@@ -408,11 +410,11 @@ const ShortList = () => {
                       exit={{ opacity: 0, scale: 0.98 }}
                       className="mb-3"
                     >
-                      <div className="p-3 sm:p-4 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center gap-3 sm:gap-4">
+                      <div className="p-4 bg-white/[0.03] border border-white/10 rounded-2xl flex flex-col gap-3">
                         <input
                           autoFocus
-                          placeholder="What needs to be done?"
-                          className="flex-1 bg-transparent border-none outline-none text-sm font-medium text-white placeholder:text-white/10"
+                          placeholder="Task title..."
+                          className="w-full bg-transparent border-none outline-none text-sm font-bold text-white placeholder:text-white/20"
                           value={newTask}
                           onChange={(e) => setNewTask(e.target.value)}
                           onKeyDown={(e) => {
@@ -420,12 +422,27 @@ const ShortList = () => {
                             if (e.key === "Escape") setIsAddingTask(false);
                           }}
                         />
-                        <div className="flex items-center gap-2">
-                          <Button size="sm" onClick={handleAddTask} className="h-8 bg-white text-black font-bold text-xs px-4 sm:px-6 rounded-lg">
-                            Save
+                        <textarea
+                          placeholder="Add details (optional)..."
+                          className="w-full bg-transparent border-none outline-none text-xs text-white/50 placeholder:text-white/10 min-h-[60px] resize-none"
+                          value={newDescription}
+                          onChange={(e) => setNewDescription(e.target.value)}
+                        />
+                        <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/5">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => setIsAddingTask(false)} 
+                            className="h-8 text-[10px] text-white/30 hover:text-white hover:bg-white/5 font-semibold px-4"
+                          >
+                            Cancel
                           </Button>
-                          <Button size="icon" variant="ghost" onClick={() => setIsAddingTask(false)} className="h-8 w-8 text-white/30 hover:text-white">
-                            <X className="h-4 w-4" />
+                          <Button 
+                            size="sm" 
+                            onClick={handleAddTask} 
+                            className="h-8 bg-white text-black hover:bg-white/90 font-bold text-[10px] px-6 rounded-lg"
+                          >
+                            Add Task
                           </Button>
                         </div>
                       </div>
@@ -448,7 +465,7 @@ const ShortList = () => {
                          <ShortTask 
                            num={index} 
                            comp={e} 
-                           onToggle={() => handleUpdateTask(e.id, { completed: !e.completed })}
+                           onToggle={() => handleUpdateTask(e.id, { completed: !e.completed, status: !e.completed ? "Done" : "Pending" })}
                            onDelete={() => handleDeleteTask(e.id)}
                            onRename={(newName) => handleUpdateTask(e.id, { shortTodoName: newName })}
                            onUpdate={(updates) => handleUpdateTask(e.id, updates)}

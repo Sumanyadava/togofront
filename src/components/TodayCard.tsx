@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/popover";
 import HoursLeftInDay from "@/helper/timeRelated/HoursLeftInDay";
 import { useAtom } from "jotai";
-import { dailyTodoContainerAtom, DailyTodo } from "@/state";
+import { dailyTodoContainerAtom, DailyTodo } from "@/state/state";
 import { toast } from "sonner";
-import { timeLeftInTodayAtom } from "@/stateHelper";
+import { timeLeftInTodayAtom } from "@/state/stateHelper";
 import { Input } from "./ui/input";
 
 // --- Animation Variants ---

@@ -1,4 +1,4 @@
-import { timeLeftInTodayAtom } from '@/stateHelper';
+import { timeLeftInTodayAtom } from '@/state/stateHelper';
 import { useAtom } from 'jotai';
 import React, { useEffect } from 'react';
 
