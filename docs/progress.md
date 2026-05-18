@@ -4,10 +4,10 @@ completed short todo
 - naming convention
 - color code 
 - add desc to short list 
-
+# starting v2.2
 current do 
 - more or less everything is functional make it refine 
-
+# starting v2.4
 inprogress
 - ui of short list in short list page 
 - long list

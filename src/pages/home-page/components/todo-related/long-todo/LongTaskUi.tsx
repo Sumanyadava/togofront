@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LongTodoJ } from "@/state/state";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { SquarePen, Trash2, Check, X } from "lucide-react";
+import { SquarePen, Trash2, Check, X, ChevronRight, Target } from "lucide-react";
 import useLongPress from "@/hooks/useLongpress";
 import { toast } from "sonner";
 
@@ -22,30 +22,25 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({
   onRename, 
   onToggleComplete 
 }) => {
+  const navigate = useNavigate();
   const [deadlineWidth, setDeadlineWidth] = useState(60);
-  const [mileShow, setMileShow] = useState(false);
   const [showAction, setShowAction] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(long.LongTodoName);
 
   const getBackgroundColor = () => {
     switch (long.tag) {
-      case "impUrg":
-        return "bg-red-400";
-      case "nonImpUrg":
-        return "bg-orange-400";
-      case "impNonUrg":
-        return "bg-yellow-500";
-      case "NonImpNonUrg":
-        return "bg-green-600";
-      case "Timeless":
-        return "hidden"  
-      default:
-        return "bg-black";
+      case "impUrg": return "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]";
+      case "nonImpUrg": return "bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]";
+      case "impNonUrg": return "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]";
+      case "NonImpNonUrg": return "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]";
+      case "Timeless": return "hidden";
+      default: return "bg-white/20";
     }
   };
 
   useEffect(() => {
+    if (!long.createedAt || !long.deadline) return;
     const createdDate = new Date(long.createedAt).getTime();
     const deadlineDate = new Date(long.deadline).getTime();
     const currentTime = new Date().getTime();
@@ -60,17 +55,26 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({
     }
   }, [long.createedAt, long.deadline]);
 
-  const handleToggle = () => {
-    if (isEditing) return;
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation(); // prevent navigating
     onToggleComplete(long.id);
   };
 
+  const handleCardClick = () => {
+    if (isEditing) return;
+    if (showAction) {
+      setShowAction(false);
+    } else {
+      navigate(`/LongProjects/${containerId}/task/${long.id}`);
+    }
+  };
+
   const handleLongPress = () => {
-    setShowAction((prev) => !prev);
+    setShowAction(true);
     if (window.navigator.vibrate) window.navigator.vibrate(50);
   };
 
-  const longPressRef = useLongPress<HTMLDivElement>(handleLongPress, handleToggle);
+  const longPressRef = useLongPress<HTMLDivElement>(handleLongPress, handleCardClick);
 
   const startEdit = () => {
     setEditText(long.LongTodoName);
@@ -90,26 +94,15 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({
     onDelete(long.id);
     toast.error("Goal removed");
   };
-  
 
-
-
-  function daysLeft(targetDate: Date) {
-  const currentDate: any = new Date() 
-    const target: any = new Date(targetDate); // Target date
-  
-    // Calculate the difference in milliseconds
+  function daysLeft(targetDate: Date | null | undefined) {
+    if (!targetDate) return 0;
+    const currentDate = new Date().getTime();
+    const target = new Date(targetDate).getTime();
     const differenceInMs = target - currentDate;
-  
-    // Convert milliseconds to days
-    const daysLeft = Math.ceil(differenceInMs / (1000 * 60 * 60 * 24));
-  
-    return daysLeft >= 0 ? daysLeft : 0; // Return 0 if the date has passed
+    const days = Math.ceil(differenceInMs / (1000 * 60 * 60 * 24));
+    return days >= 0 ? days : 0;
   }
-  
-
-  // console.log(long);
-  
 
   return (
     <motion.div
@@ -118,101 +111,120 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       ref={longPressRef}
-      className={`group relative my-3 rounded-xl transition-all duration-300 border border-white/5 overflow-hidden select-none cursor-pointer ${
+      className={`group relative my-3 rounded-2xl transition-all duration-300 border overflow-hidden select-none cursor-pointer ${
         long.completed 
-          ? "opacity-60 grayscale-[0.5] bg-white/5" 
-          : "bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/10"
+          ? "border-white/5 bg-white/[0.02] opacity-70 grayscale-[0.3]" 
+          : "border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.01] hover:border-primary/30 hover:bg-white/[0.08] hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
       }`}
     >
-      <div className="relative w-full">
-        {/* Progress Background */}
+      {/* Dynamic Progress Background */}
+      {!long.completed && long.deadline && (
         <div
           style={{ width: `${deadlineWidth}%` }}
-          className="h-full absolute top-0 left-0 bg-primary/10 transition-all duration-1000 ease-out pointer-events-none"
+          className="h-full absolute top-0 left-0 bg-gradient-to-r from-primary/5 to-primary/10 transition-all duration-1000 ease-out pointer-events-none"
         />
+      )}
 
-        <div className="relative z-10 p-3.5 flex items-center justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            {isEditing ? (
-              <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
-                <input
-                  autoFocus
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") confirmEdit();
-                    if (e.key === "Escape") setIsEditing(false);
-                  }}
-                  className="flex-1 bg-white/10 text-sm px-2 py-1 rounded-lg outline-none border border-white/10 focus:border-primary/50"
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <button onClick={(e) => { e.stopPropagation(); confirmEdit(); }} className="p-1.5 rounded-lg bg-primary/20 text-primary">
-                  <Check size={14} />
-                </button>
-                <button onClick={(e) => { e.stopPropagation(); setIsEditing(false); }} className="p-1.5 rounded-lg bg-white/5 text-white/40">
-                  <X size={14} />
-                </button>
+      <div className="relative z-10 p-4 flex items-center gap-4">
+        {/* Checkbox Toggle */}
+        <button 
+          onClick={handleToggle}
+          className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+            long.completed 
+              ? "border-primary bg-primary text-black" 
+              : "border-white/20 text-transparent hover:border-primary/50 hover:bg-primary/10"
+          }`}
+        >
+          <Check size={14} className={long.completed ? "opacity-100" : "opacity-0"} strokeWidth={3} />
+        </button>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
+          {isEditing ? (
+            <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+              <input
+                autoFocus
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") confirmEdit();
+                  if (e.key === "Escape") setIsEditing(false);
+                }}
+                className="flex-1 bg-black/40 text-sm px-3 py-1.5 rounded-lg outline-none border border-primary/50 focus:ring-1 focus:ring-primary shadow-inner text-white"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <button onClick={(e) => { e.stopPropagation(); confirmEdit(); }} className="p-1.5 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors">
+                <Check size={16} />
+              </button>
+              <button onClick={(e) => { e.stopPropagation(); setIsEditing(false); }} className="p-1.5 rounded-lg bg-white/10 text-white/60 hover:bg-white/20 hover:text-white transition-colors">
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <h4 className={`text-sm font-medium truncate transition-colors duration-300 ${
+                  long.completed ? "line-through text-white/40" : "text-white/90 group-hover:text-white"
+                }`}>
+                  {long.LongTodoName}
+                </h4>
+                <div className={`w-1.5 h-1.5 rounded-full ${getBackgroundColor()}`} />
               </div>
-            ) : (
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
-                  <h4 className={`text-sm font-semibold truncate ${long.completed ? "line-through text-white/30" : "text-white/90"}`}>
-                    {long.LongTodoName}
-                  </h4>
-                  <div className={`w-2 h-2 rounded-full ${getBackgroundColor()}`} />
-                </div>
-                <div className="flex items-center gap-3">
-                   <span className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">
-                     {deadlineWidth < 90 ? `${daysLeft(long.deadline)} days left` : "Deadline near"}
-                   </span>
-                   {long.tag && (
-                     <span className="text-[10px] font-medium text-primary/40 px-1.5 py-0.5 bg-primary/5 rounded border border-primary/10">
-                       {long.tag}
+              
+              <div className="flex items-center gap-2.5">
+                 {long.deadline && (
+                   <div className="flex items-center gap-1 text-[10px] font-medium text-white/40 bg-black/20 px-1.5 py-0.5 rounded-md border border-white/5">
+                     <Target size={10} className={deadlineWidth > 80 ? "text-red-400" : "text-primary/60"} />
+                     <span className={deadlineWidth > 80 ? "text-red-400/80" : ""}>
+                       {daysLeft(long.deadline)} days left
                      </span>
-                   )}
-                </div>
+                   </div>
+                 )}
+               
               </div>
-            )}
-          </div>
-
-          {!isEditing && (
-             <div className="flex items-center gap-2 shrink-0">
-                <AnimatePresence>
-                  {showAction ? (
-                    <motion.div 
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      className="flex items-center gap-1 bg-black/40 backdrop-blur-md p-1 rounded-lg border border-white/10"
-                    >
-                      <button
-                        onClick={(e) => { e.stopPropagation(); startEdit(); }}
-                        className="p-1.5 rounded-md hover:bg-white/10 text-white/70 transition-colors"
-                      >
-                        <SquarePen size={14} />
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDelete(); }}
-                        className="p-1.5 rounded-md hover:bg-red-500/20 text-red-400 transition-colors"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </motion.div>
-                  ) : (
-                    <Link
-                      to={`/LongProjects/${containerId}/task/${long.id}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="p-2 hover:bg-white/5 rounded-lg transition-colors group/link"
-                    >
-                      <Check className="text-white/10 group-hover/link:text-primary transition-colors" size={18} />
-                    </Link>
-                  )}
-                </AnimatePresence>
-             </div>
+            </div>
           )}
-
-          
         </div>
+
+        {/* Action / Arrow */}
+        {!isEditing && (
+          <div className="flex items-center gap-2 shrink-0">
+             <AnimatePresence mode="wait">
+               {showAction ? (
+                 <motion.div 
+                   key="actions"
+                   initial={{ opacity: 0, scale: 0.9 }}
+                   animate={{ opacity: 1, scale: 1 }}
+                   exit={{ opacity: 0, scale: 0.9 }}
+                   className="flex items-center gap-1 bg-black/60 backdrop-blur-xl p-1 rounded-xl border border-white/10 shadow-lg"
+                 >
+                   <button
+                     onClick={(e) => { e.stopPropagation(); startEdit(); }}
+                     className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-all"
+                   >
+                     <SquarePen size={14} />
+                   </button>
+                   <button
+                     onClick={(e) => { e.stopPropagation(); handleDelete(); }}
+                     className="p-2 rounded-lg hover:bg-red-500/20 text-red-400/80 hover:text-red-400 transition-all"
+                   >
+                     <Trash2 size={14} />
+                   </button>
+                 </motion.div>
+               ) : (
+                 <motion.div 
+                   key="arrow"
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   exit={{ opacity: 0 }}
+                   className="p-1.5 text-white/20 group-hover:text-primary transition-colors duration-300"
+                 >
+                   <ChevronRight size={18} className={long.completed ? "opacity-0" : ""} />
+                 </motion.div>
+               )}
+             </AnimatePresence>
+          </div>
+        )}
       </div>
     </motion.div>
   );
