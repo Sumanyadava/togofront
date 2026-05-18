@@ -17,7 +17,7 @@ const LongList = () => {
 
   const { containerId } = useParams();
 
-  const [longTodoArray] = useAtom<LongTodoContainer[]>(
+  const [longTodoArray, setLongTodoArray] = useAtom<LongTodoContainer[]>(
     LongTodoContainerAtom
   );
 
@@ -33,6 +33,50 @@ const LongList = () => {
 
     setLongTaskS(longTask ? longTask.LongTodo : []);
   }, [longTodoArray, containerId]);
+
+  // ── Handlers ──
+  const handleToggleComplete = (taskId: number) => {
+    setLongTodoArray((prev) =>
+      prev.map((container) => {
+        if (container.id === Number(containerId)) {
+          return {
+            ...container,
+            LongTodo: container.LongTodo.map((t) =>
+              t.id === taskId ? { ...t, completed: !t.completed } : t
+            ),
+          };
+        }
+        return container;
+      })
+    );
+  };
+
+  const handleRename = (taskId: number, newName: string) => {
+    setLongTodoArray((prev) =>
+      prev.map((container) => {
+        if (container.id === Number(containerId)) {
+          return {
+            ...container,
+            LongTodo: container.LongTodo.map((t) =>
+              t.id === taskId ? { ...t, LongTodoName: newName } : t
+            ),
+          };
+        }
+        return container;
+      })
+    );
+  };
+
+  const handleDelete = (taskId: number) => {
+    setLongTodoArray((prev) =>
+      prev.map((container) => {
+        if (container.id === Number(containerId)) {
+          return { ...container, LongTodo: container.LongTodo.filter((t) => t.id !== taskId) };
+        }
+        return container;
+      })
+    );
+  };
 
   return (
     <div className="h-screen w-full overflow-hidden p-5">
@@ -86,7 +130,16 @@ const LongList = () => {
             </div>
             <div className="overflow-y-auto h-full scrollbar-custom bg-white pb-10">
               {longTaskS.map((e, index) => {
-                return <LongTaskUi key={index} long={e} containerId={Number(containerId)} />;
+                return (
+                  <LongTaskUi 
+                    key={index} 
+                    long={e} 
+                    containerId={Number(containerId)} 
+                    onDelete={handleDelete}
+                    onRename={handleRename}
+                    onToggleComplete={handleToggleComplete}
+                  />
+                );
               })}
               <div className="mb-20">end here</div>
             </div>

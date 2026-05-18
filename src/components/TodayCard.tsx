@@ -13,6 +13,8 @@ import { dailyTodoContainerAtom, DailyTodo } from "@/state/state";
 import { toast } from "sonner";
 import { timeLeftInTodayAtom } from "@/state/stateHelper";
 import { Input } from "./ui/input";
+import { db, auth } from "@/firebase";
+import { collection, query, where, getDocs, updateDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 // --- Animation Variants ---
 const containerVariants = {
@@ -130,37 +132,94 @@ const TodayCard: React.FC = () => {
   // Progress calculation for the day (assuming 24h day for simple visual)
   const dayProgress = Math.max(0, Math.min(100, ((24 - hoursLeft) / 24) * 100));
 
-  const toggleTaskCompletion = (index: number) => {
+  const toggleTaskCompletion = async (index: number) => {
+    const taskToToggle = tasks[index];
+    const newCompletedStatus = !taskToToggle.completed;
+
+    // Update local state first for responsiveness
     setTasks((prev) =>
       prev.map((task, i) =>
-        i === index ? { ...task, completed: !task.completed } : task
+        i === index ? { ...task, completed: newCompletedStatus } : task
       )
     );
+
+    // Sync with Firebase
+    const userId = auth.currentUser?.uid;
+    if (!userId) return;
+
+    try {
+      const q = query(
+        collection(db, `users/${userId}/dailyTodos`),
+        where("id", "==", taskToToggle.id)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((docSnap) => {
+        updateDoc(doc(db, `users/${userId}/dailyTodos`, docSnap.id), {
+          completed: newCompletedStatus,
+        });
+      });
+    } catch (error) {
+      console.error("Failed to sync task completion:", error);
+      toast.error("Failed to sync change");
+    }
   };
 
-  const deleteTask = (index: number) => {
+  const deleteTask = async (index: number) => {
+    const taskToDelete = tasks[index];
+    
+    // Update local state
     setTasks((prev) => prev.filter((_, i) => i !== index));
     toast.info("Task removed");
+
+    // Sync with Firebase
+    const userId = auth.currentUser?.uid;
+    if (!userId) return;
+
+    try {
+      const q = query(
+        collection(db, `users/${userId}/dailyTodos`),
+        where("id", "==", taskToDelete.id)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((docSnap) => {
+        deleteDoc(doc(db, `users/${userId}/dailyTodos`, docSnap.id));
+      });
+    } catch (error) {
+      console.error("Failed to delete task from Firebase:", error);
+    }
   };
 
-  const addNewTask = () => {
+  const addNewTask = async () => {
     if (tasks.length >= 3) {
       toast.error("Daily limit is 3 tasks");
       return;
     }
 
     if (newTaskName.trim()) {
-      setTasks((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          DailyName: newTaskName.trim(),
-          completed: false,
-        },
-      ]);
+      const newTask: DailyTodo = {
+        id: Date.now(),
+        DailyName: newTaskName.trim(),
+        completed: false,
+      };
+
+      // Update local state
+      setTasks((prev) => [...prev, newTask]);
       setNewTaskName("");
       setIsAdding(false);
       toast.success("Task added!");
+
+      // Sync with Firebase
+      const userId = auth.currentUser?.uid;
+      if (!userId) return;
+
+      try {
+        // Using setDoc with a unique ID or addDoc. 
+        // Here we use a random doc ID but store our custom id inside.
+        await setDoc(doc(collection(db, `users/${userId}/dailyTodos`)), newTask);
+      } catch (error) {
+        console.error("Failed to add task to Firebase:", error);
+        toast.error("Failed to sync new task");
+      }
     } else {
       toast.error("Task name cannot be empty");
     }

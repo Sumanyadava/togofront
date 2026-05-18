@@ -176,7 +176,7 @@ const ShortTodo: React.FC<{
       const newTask: ShortTodoJ = {
         id: Date.now(),
         shortTodoName: text,
-        description: description.trim() || undefined,
+        description: description.trim() || "",
         completed: false,
         tag: "",
         status: "Pending", 

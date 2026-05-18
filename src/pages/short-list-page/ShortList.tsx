@@ -169,7 +169,7 @@ const ShortList = () => {
     const task: ShortTodoJ = {
       id: Date.now(),
       shortTodoName: trimmed,
-      description: newDescription.trim() || undefined,
+      description: newDescription.trim() || "",
       completed: false,
       tag: "Priority",
       status: "In Progress",

@@ -89,7 +89,7 @@ const ShortTaskUi: React.FC<ShortTaskUiProps> = ({
     
     if (trimmedTitle && (trimmedTitle !== task_name || trimmedDesc !== (description || ""))) {
       if (onUpdate) {
-        onUpdate(taskId, { shortTodoName: trimmedTitle, description: trimmedDesc || undefined });
+        onUpdate(taskId, { shortTodoName: trimmedTitle, description: trimmedDesc || "" });
       } else {
         onRename(taskId, trimmedTitle);
       }

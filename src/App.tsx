@@ -14,6 +14,9 @@ import LongList from "@/pages/long-list-page/LongList";
 import LongTaskDetail from "@/pages/long-list-page/LongTaskDetail";
 import TimerApp from "@/pages/timer-page/TimerApp";
 import ShortList from "@/pages/short-list-page/ShortList";
+import ChallengePage from "@/pages/challenge-page/ChallengePage";
+import HabitPage from "@/pages/habit-page/HabitPage";
+import PlanPage from "@/pages/plan-page/PlanPage";
 
 // ── Protect private routes ──
 const ProtectedRoute = ({ children, user }: { children: JSX.Element; user: User | null }) => {
@@ -79,6 +82,9 @@ const App = () => {
           <Route path="/LongProjects/:containerId" element={<ProtectedRoute user={user}><LongList /></ProtectedRoute>} />
           <Route path="/LongProjects/:containerId/task/:taskId" element={<ProtectedRoute user={user}><LongTaskDetail /></ProtectedRoute>} />
           <Route path="/timerapp" element={<ProtectedRoute user={user}><TimerApp /></ProtectedRoute>} />
+          <Route path="/challenge-page" element={<ProtectedRoute user={user}><ChallengePage /></ProtectedRoute>} />
+          <Route path="/habit-page" element={<ProtectedRoute user={user}><HabitPage /></ProtectedRoute>} />
+          <Route path="/plan-page" element={<ProtectedRoute user={user}><PlanPage /></ProtectedRoute>} />
         </Routes>
       </div>
       <Toaster richColors />

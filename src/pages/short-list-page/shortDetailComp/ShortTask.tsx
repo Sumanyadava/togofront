@@ -44,7 +44,7 @@ const ShortTask: React.FC<ShortTaskProps> = ({
     if (nameChanged || descChanged) {
       onUpdate({ 
         shortTodoName: tempName.trim() || comp.shortTodoName, 
-        description: tempDesc.trim() || undefined 
+        description: tempDesc.trim() || "" 
       });
     }
     setIsEditing(false);

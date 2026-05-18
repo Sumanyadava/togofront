@@ -48,7 +48,7 @@ export interface LongTodoJ{
   milestone: any;
   planText:string;
   createedAt:Date;
-  
+  blocks?: any[];
 }
 
 export const LongTodoContainerAtom = atom<LongTodoContainer[]>([]);
@@ -66,24 +66,51 @@ export interface DailyTodo {
 }
 
 // Daily To-do Atom
-export const dailyTodoContainerAtom = atom<DailyTodo[]>([
-  {
-    id: 1,
-    DailyName: "Morning Exercise",
-    completed: false,
-  },
-  {
-    id: 2,
-    DailyName: "Check Emails",
-    completed: true,
-  },
-  {
-    id: 3,
-    DailyName: "Team Meeting",
-    completed: false,
-  },
-],);
+export const dailyTodoContainerAtom = atom<DailyTodo[]>([]);
 
+// ── Challenges ──
+export interface Challenge {
+  id: string;
+  title: string;
+  description: string;
+  startDate: Date;
+  durationDays: number;
+  completedDates: string[]; // YYYY-MM-DD
+  status: "active" | "completed" | "failed" | "abandoned";
+  color?: string;
+  icon?: string;
+}
+
+export const challengesAtom = atom<Challenge[]>([]);
+
+
+// ── Habits ──
+export interface Habit {
+  id: string;
+  title: string;
+  description?: string;
+  frequency: "daily" | "weekly";
+  completedDates: string[]; // YYYY-MM-DD
+  color: string;
+  icon: string;
+  createdAt: Date;
+}
+
+export const habitsAtom = atom<Habit[]>([]);
+
+// ── Plans ──
+export type PlanTimeframe = "day" | "week" | "month" | "6_months" | "1_year" | "5_years";
+
+export interface PlanItem {
+  id: string;
+  title: string;
+  description?: string;
+  timeframe: PlanTimeframe;
+  completed: boolean;
+  createdAt: Date;
+}
+
+export const plansAtom = atom<PlanItem[]>([]);
 
 // ── Firebase fetch: called once after login ──
 const store = getDefaultStore();
@@ -127,4 +154,43 @@ export const fetchAllFromFirebase = async () => {
   const dailySnap = await getDocs(collection(db, `users/${userId}/dailyTodos`));
   const dailyData: DailyTodo[] = dailySnap.docs.map(doc => doc.data() as DailyTodo);
   store.set(dailyTodoContainerAtom, dailyData);
+
+  // Challenges
+  const challengesSnap = await getDocs(collection(db, `users/${userId}/challenges`));
+  const challengesData: Challenge[] = challengesSnap.docs.map(doc => {
+    const data = doc.data() as Challenge;
+    if ((data as any).startDate?.toDate) {
+      data.startDate = (data as any).startDate.toDate();
+    } else if (typeof data.startDate === 'string') {
+      data.startDate = new Date(data.startDate);
+    }
+    return data;
+  });
+  store.set(challengesAtom, challengesData);
+
+  // Habits
+  const habitsSnap = await getDocs(collection(db, `users/${userId}/habits`));
+  const habitsData: Habit[] = habitsSnap.docs.map(doc => {
+    const data = doc.data() as Habit;
+    if ((data as any).createdAt?.toDate) {
+      data.createdAt = (data as any).createdAt.toDate();
+    } else if (typeof data.createdAt === 'string') {
+      data.createdAt = new Date(data.createdAt);
+    }
+    return data;
+  });
+  store.set(habitsAtom, habitsData);
+
+  // Plans
+  const plansSnap = await getDocs(collection(db, `users/${userId}/plans`));
+  const plansData: PlanItem[] = plansSnap.docs.map(doc => {
+    const data = doc.data() as PlanItem;
+    if ((data as any).createdAt?.toDate) {
+      data.createdAt = (data as any).createdAt.toDate();
+    } else if (typeof data.createdAt === 'string') {
+      data.createdAt = new Date(data.createdAt);
+    }
+    return data;
+  });
+  store.set(plansAtom, plansData);
 };

@@ -17,8 +17,10 @@ import { AvatarWithNotification } from "@/components/ui/avatar-with-notification
 import { LogOut, User as UserIcon, Settings, Bell } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase";
+import { useNavigate } from "react-router-dom";
 
 const HeaderHome = () => {
+  const navigate = useNavigate();
   const [isDark, setIsDark] = useState(() => {
     return localStorage.getItem("theme") === "true";
   });
@@ -46,7 +48,7 @@ const HeaderHome = () => {
         className="mx-5 text-xl"
         onClick={toggleDarkMode}
       >
-        Togo
+        Togo.V2
       </Button>
 
       <Searchbar />
@@ -54,7 +56,7 @@ const HeaderHome = () => {
       <div className="flex gap-5 mx-5">
         <Popover>
           <PopoverTrigger asChild>
-            <Button>Week</Button>
+            <Button onClick={() => navigate('/plan-page')}>Week</Button>
           </PopoverTrigger>
           <PopoverContent>Deadline -{/* <LongTaskUi /> */}</PopoverContent>
         </Popover>
@@ -67,7 +69,8 @@ const HeaderHome = () => {
             Habbits -{/* <LongTaskUi /> */}
             
             {/* <LongTaskUi /> */}
-            go full
+            <Button onClick={() => navigate('/habit-page')}>Habits Page</Button>
+            
           </PopoverContent>
         </Popover>
 

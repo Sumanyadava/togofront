@@ -10,13 +10,14 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "./ui/button";
-import { Radar, House, Timer, Book } from "lucide-react";
+import { Radar, House, Timer, Book, Activity, Flame } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const navlink = [
-  { place: "home", icon: House },
-  { place: "timerapp", icon: Timer },
-  { place: "allout", icon: Book },
+  { place: "/", icon: House, label: "Home" },
+  { place: "/timerapp", icon: Timer, label: "Timer" },
+  { place: "/challenge-page", icon: Flame, label: "Challenges" },
+  { place: "/habit-page", icon: Activity, label: "Habits" },
 ];
 const NavBar = () => {
   return (
@@ -34,13 +35,14 @@ const NavBar = () => {
             <SheetDescription>
               {navlink.map((ele, index) => {
                 return (
-                  <Button
-                    key={index}
-                    size="icon"
-                    className=" bg-white rounded-xl hover:rounded-full transition-all duration-100 ease-linear my-5 text-black flex justify-center items-center"
-                  >
-                    <Link to={ele.place}>{React.createElement(ele.icon)}</Link>
-                  </Button>
+                  <Link key={index} to={ele.place} title={ele.label}>
+                    <Button
+                      size="icon"
+                      className="bg-white rounded-xl hover:rounded-full transition-all duration-100 ease-linear my-5 text-black flex justify-center items-center w-12 h-12"
+                    >
+                      {React.createElement(ele.icon)}
+                    </Button>
+                  </Link>
                 );
               })}
             </SheetDescription>
