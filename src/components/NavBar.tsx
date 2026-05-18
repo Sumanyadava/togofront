@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "./ui/button";
-import { Radar, House, Timer, Book, Activity, Flame } from "lucide-react";
+import { Radar, House, Timer,  Activity, Flame } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const navlink = [

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
 import { plansAtom, PlanItem, PlanTimeframe } from "@/state/state";
 import { db, auth } from "@/firebase";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
-import { ArrowLeft, Plus, Trash2, CheckCircle2, Circle, MoreVertical, Compass } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, CheckCircle2, Circle, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";

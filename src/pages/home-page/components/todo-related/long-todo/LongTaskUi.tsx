@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { LongTodoJ } from "@/state/state";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { SquarePen, Trash2, Check, X, ChevronRight, Target } from "lucide-react";
 import useLongPress from "@/hooks/useLongpress";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, ChevronRight, SquarePen, Target, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
 interface LongTaskUiProps {

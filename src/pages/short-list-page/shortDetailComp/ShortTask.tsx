@@ -5,7 +5,7 @@ import { ShortAction } from "./ShortAction";
 import { format } from 'date-fns';
 import { ShortTodoJ } from "@/state/state";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X, GripVertical } from "lucide-react";
+import {  GripVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +30,7 @@ const ShortTask: React.FC<ShortTaskProps> = ({
   num, 
   onToggle, 
   onDelete, 
-  onRename, 
+   
   onUpdate 
 }) => {
   const [isEditing, setIsEditing] = useState(false);

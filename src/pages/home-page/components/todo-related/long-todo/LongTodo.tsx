@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Timer } from "lucide-react";
+// import { Timer } from "lucide-react";
 
 import { TagsLong } from "@/components/TagsLong";
 import LongTaskUi from "@/pages/home-page/components/todo-related/long-todo/LongTaskUi";
@@ -14,14 +14,14 @@ import { LongTodoContainerAtom, LongTodoJ, LongTodoContainer } from "@/state/sta
 import { db, auth } from '@/firebase';
 import { collection, query, where, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { toast } from 'sonner';
-import { X, Check, Calendar, Tag as TagIcon, Plus, Edit3, Trash2 } from "lucide-react";
+import { X, Check, Calendar,  Plus, Edit3, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import useLongPress from "@/hooks/useLongpress";
 
 const LongTodo: React.FC<{
   LongContainerName: string;
 
-  id: number;
+  id: number; 
 }> = ({ LongContainerName, id }) => {
   const [headerHeight, setHeaderHeight] = useState(false);
   const [longText, setLongText] = useState("");

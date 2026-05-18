@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import ShortTaskUi from "./ShortTaskUi";
-import { ScanSearch, Trash2, Edit3, X, Check } from "lucide-react";
-import { useAtom } from "jotai";
-import { AnimatePresence, motion } from "framer-motion";
-import { shortTodoContainerAtom, ShortTodoJ, ShortTodoContainer } from "@/state/state";
-import { Link } from "react-router-dom";
-import {db, auth} from '@/firebase'
-import { collection, query, where, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore'
-import { toast } from 'sonner'
+import { Card, CardContent } from "@/components/ui/card";
+import { auth, db } from '@/firebase';
 import useLongPress from "@/hooks/useLongpress";
+import { ShortTodoContainer, shortTodoContainerAtom, ShortTodoJ } from "@/state/state";
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { AnimatePresence, motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { Check, Edit3, ScanSearch, Trash2, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from 'sonner';
+import ShortTaskUi from "./ShortTaskUi";
 
 
 

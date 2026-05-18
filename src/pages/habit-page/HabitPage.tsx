@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { habitsAtom, Habit } from "@/state/state";
 import { db, auth } from "@/firebase";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
-import { format, subDays, isSameDay, parseISO } from "date-fns";
+import { format, subDays} from "date-fns";
 import {
   ArrowLeft,
   Plus,

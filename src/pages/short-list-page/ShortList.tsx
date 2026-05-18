@@ -15,7 +15,6 @@ import {
   Pen,
   Plus,
   Check,
-  X,
   Eye,
   EyeOff,
   Search,

@@ -15,12 +15,11 @@ import {
   Circle,
   ArrowLeft,
   Plus,
-  GripVertical,
-  FileText,
+
   Layers,
   Save,
 } from "lucide-react";
-import RichTextCanvas from "./richtext";
+
 import { Editor } from 'primereact/editor';
 import MindBlock, { BlockData, COLORS } from "./MindBlock";
 
