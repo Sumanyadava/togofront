@@ -17,6 +17,7 @@ import ShortList from "@/pages/short-list-page/ShortList";
 import ChallengePage from "@/pages/challenge-page/ChallengePage";
 import HabitPage from "@/pages/habit-page/HabitPage";
 import PlanPage from "@/pages/plan-page/PlanPage";
+import Test from "./test/Test";
 
 // ── Protect private routes ──
 const ProtectedRoute = ({ children, user }: { children: JSX.Element; user: User | null }) => {
@@ -75,7 +76,7 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/signup" element={<PublicRoute user={user}><Signup /></PublicRoute>} />
           <Route path="/login" element={<PublicRoute user={user}><Login /></PublicRoute>} />
-
+          <Route path="/test" element={<PublicRoute user={user}><Test /></PublicRoute>} />
           {/* Protected Routes */}
           <Route path="/" element={<ProtectedRoute user={user}><HomePage /></ProtectedRoute>} />
           <Route path="/shortList/:id" element={<ProtectedRoute user={user}><ShortList /></ProtectedRoute>} />
