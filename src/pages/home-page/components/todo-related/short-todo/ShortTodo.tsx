@@ -38,7 +38,7 @@ const ShortTodo: React.FC<{
   }, [shortTodoArray, id]);
 
 
-  const syncWithFirebase = async (updatedContainer: any) => {
+  const syncWithFirebase = async (updatedContainer: ShortTodoContainer) => {
     const userId = auth.currentUser?.uid;
     if (!userId) return;
 
@@ -154,7 +154,7 @@ const ShortTodo: React.FC<{
       }
       setTodoArray((prev) => prev.filter((c) => c.id !== id));
       toast.success("List deleted successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete list");
     }
   };
@@ -366,7 +366,7 @@ const ShortTodo: React.FC<{
                   task_name={e.shortTodoName}
                   description={e.description}
                   status={e.status}
-                  isHidden={(e as any).hidden ?? false}
+                  isHidden={e.hidden ?? false}
                   onDelete={handleDelete}
                   onToggleHide={handleToggleHide}
                   onRename={handleRename}

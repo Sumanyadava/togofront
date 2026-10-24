@@ -23,20 +23,19 @@ const HomePage = () => {
 
 
   return (
-    <div className="text-lg h-screen ">
+    <div className="text-lg min-h-screen pb-20 relative">
       <HeaderHome />
 
-
       {/* main  */}
-      <div className="body_here   flex flex-wrap gap-4 justify-center   ">
+      <div className="body_here flex flex-wrap gap-4 justify-center relative">
         <AnimatePresence>
           {headerHeight && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "min-content", opacity: 1 }}
+              animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeIn" }}
-              className="top_header dark:bg-black flex flex-col-reverse w-full justify-around items-center md:flex-row relative overflow-hidden"
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="top_header flex flex-col-reverse w-full justify-around items-center md:flex-row relative overflow-hidden"
             >
               <CurrentlyWorking />
               <ChallengeTimer />

@@ -68,7 +68,7 @@ const ShortList = () => {
       setNotes(currentContainer.Notes || "");
       setTempTitle(currentContainer.shortContainername);
     }
-  }, [currentContainer?.id]); // Only re-init when switching containers
+  }, [currentContainer]);
 
   const completed = shortTaskS.filter((t) => t.completed).length;
   const total = shortTaskS.length;

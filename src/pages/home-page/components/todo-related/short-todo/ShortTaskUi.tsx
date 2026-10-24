@@ -48,6 +48,18 @@ const ShortTaskUi: React.FC<ShortTaskUiProps> = ({
   const [editText, setEditText] = useState(task_name);
   const [editDesc, setEditDesc] = useState(description || "");
 
+  React.useEffect(() => {
+    setShortChecked(isChecked);
+  }, [isChecked]);
+
+  React.useEffect(() => {
+    setEditText(task_name);
+  }, [task_name]);
+
+  React.useEffect(() => {
+    setEditDesc(description || "");
+  }, [description]);
+
   const handleShortClick = () => {
     if (isEditing) return; // Don't toggle while editing
     setShortChecked((prev) => !prev);

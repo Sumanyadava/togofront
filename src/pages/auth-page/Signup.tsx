@@ -116,9 +116,9 @@ export default function Signup() {
     try {
       const result = await signInWithPopup(auth, provider);
       toast.success(`Welcome, ${result.user.displayName}!`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.message || "Google signup failed");
+      toast.error(error instanceof Error ? error.message : "Google signup failed");
     } finally {
       setLoading(false);
     }
@@ -149,9 +149,9 @@ export default function Signup() {
 
       toast.success("Account created successfully!");
       navigate("/");  
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.message || "Failed to create account");
+      toast.error(error instanceof Error ? error.message : "Failed to create account");
     } finally {
       setLoading(false);
     }

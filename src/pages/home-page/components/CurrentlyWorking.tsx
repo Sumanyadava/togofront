@@ -127,7 +127,7 @@ export default function CurrentlyWorking() {
 
   const activeShortTasks = shortTodoArray.flatMap(container =>
     container.shortTodos
-      .filter(task => !task.completed && task.status === "In Progress" && !(task as any).hidden)
+      .filter(task => !task.completed && task.status === "In Progress" && !task.hidden)
       .map(task => ({ task, containerId: container.id, type: "short" as const }))
   );
 
@@ -172,7 +172,7 @@ export default function CurrentlyWorking() {
                     task_name={task.shortTodoName}
                     description={task.description}
                     status={task.status}
-                    isHidden={(task as any).hidden ?? false}
+                    isHidden={task.hidden ?? false}
                     onDelete={(id) => handleDeleteShortTask(containerId, id)}
                     onToggleHide={(id) => handleUpdateShortTask(containerId, id, { hidden: true })}
                     onRename={(id, name) => handleUpdateShortTask(containerId, id, { shortTodoName: name })}

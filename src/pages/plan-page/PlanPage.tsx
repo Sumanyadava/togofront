@@ -50,7 +50,7 @@ const PlanPage = () => {
       setNewTitle("");
       setIsAdding(null);
       toast.success("Added to your plan!");
-    } catch (e) {
+    } catch {
       toast.error("Failed to add plan");
     }
   };
@@ -64,7 +64,7 @@ const PlanPage = () => {
       await setDoc(doc(db, `users/${userId}/plans`, plan.id), updated);
       setPlans(prev => prev.map(p => p.id === plan.id ? updated : p));
       if (updated.completed) toast.success("Step complete. Great progress!");
-    } catch (e) {
+    } catch {
       toast.error("Failed to update");
     }
   };
@@ -77,7 +77,7 @@ const PlanPage = () => {
       await deleteDoc(doc(db, `users/${userId}/plans`, plan.id));
       setPlans(prev => prev.filter(p => p.id !== plan.id));
       toast.success("Removed from plan");
-    } catch (e) {
+    } catch {
       toast.error("Failed to delete");
     }
   };

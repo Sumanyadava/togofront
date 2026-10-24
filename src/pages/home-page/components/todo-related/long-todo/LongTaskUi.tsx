@@ -95,7 +95,7 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({
     toast.error("Goal removed");
   };
 
-  function daysLeft(targetDate: Date | null | undefined) {
+  function daysLeft(targetDate: Date | string | null | undefined) {
     if (!targetDate) return 0;
     const currentDate = new Date().getTime();
     const target = new Date(targetDate).getTime();

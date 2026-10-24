@@ -165,7 +165,7 @@ const LongTodo: React.FC<{
       }
       setLongTodoArray((prev) => prev.filter((c) => c.id !== id));
       toast.success("Long-term list deleted");
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete list");
     }
   };

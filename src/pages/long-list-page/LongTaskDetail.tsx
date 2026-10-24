@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAtom } from "jotai";
-import { LongTodoContainerAtom, LongTodoJ } from "@/state/state";
+import { LongTodoContainerAtom, LongTodoJ, notesAtom } from "@/state/state";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { db, auth } from "@/firebase";
@@ -15,10 +15,11 @@ import {
   Circle,
   ArrowLeft,
   Plus,
-
   Layers,
   Save,
+  FileText,
 } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { Editor } from 'primereact/editor';
 import MindBlock, { BlockData, COLORS } from "./MindBlock";
@@ -36,26 +37,30 @@ const LongTaskDetail = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const constraintsRef = useRef<HTMLDivElement>(null);
 
+  const isInitializedRef = useRef(false);
+
   useEffect(() => {
     const container = longTodoArray.find((c) => c.id === Number(containerId));
     if (container) {
       setContainerName(container.LongContainerName);
       const found = container.LongTodo.find((t) => t.id === Number(taskId));
       setTask(found ?? null);
-      if (found) {
-        if (text === "" && found.planText !== text) {
-          setText(found.planText || "");
-        }
-        if (found.blocks && blocks.length === 0) {
+      if (found && !isInitializedRef.current) {
+        setText(found.planText || "");
+        if (found.blocks) {
           setBlocks(found.blocks);
           const maxZ = Math.max(1, ...found.blocks.map((b: BlockData) => b.zIndex || 1));
           setMaxZIndex(maxZ);
         }
+        isInitializedRef.current = true;
       }
     }
   }, [longTodoArray, containerId, taskId]);
 
-  const addBlock = useCallback((e?: React.MouseEvent) => {
+  const [notes] = useAtom(notesAtom);
+  const [nodeMenuOpen, setNodeMenuOpen] = useState(false);
+
+  const addBlock = useCallback((e?: React.MouseEvent, linkedNoteId?: string) => {
     const id = crypto.randomUUID();
     let x = window.innerWidth / 2 - 200;
     let y = window.innerHeight / 2 - 150;
@@ -67,11 +72,22 @@ const LongTaskDetail = () => {
     }
 
     const newBlock: BlockData = {
-      id, x, y, content: "", isMinimized: false, zIndex: maxZIndex + 1, color: COLORS[0], hasBackground: true, hasBeenDragged: false
+      id, 
+      x, 
+      y, 
+      content: "", 
+      isMinimized: false, 
+      zIndex: maxZIndex + 1, 
+      color: linkedNoteId ? "rgba(168, 85, 247, 0.15)" : COLORS[0], 
+      hasBackground: true, 
+      hasBeenDragged: false,
+      linkedNoteId: linkedNoteId || null,
+      nodeType: linkedNoteId ? "note" : "text",
     };
     setBlocks((prev) => [...prev, newBlock]);
     setMaxZIndex((prev) => prev + 1);
     setActiveId(id);
+    setNodeMenuOpen(false);
   }, [maxZIndex]);
 
   const updateBlock = (id: string, updates: Partial<BlockData>) => {
@@ -221,7 +237,7 @@ const LongTaskDetail = () => {
           <MetaChip
             icon={<Milestone className="h-4 w-4" />}
             label="Milestone"
-            value={task.milestone}
+            value={Array.isArray(task.milestone) ? task.milestone.join(", ") : String(task.milestone)}
           />
         )}
         <MetaChip
@@ -261,12 +277,46 @@ const LongTaskDetail = () => {
             Spatial Planning Canvas
           </div>
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => addBlock()}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground shadow-sm hover:scale-105 transition-all text-[10px] font-black uppercase tracking-widest"
-            >
-              <Plus size={14} /> New Node
-            </button>
+            <Popover open={nodeMenuOpen} onOpenChange={setNodeMenuOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground shadow-sm hover:scale-105 transition-all text-[10px] font-black uppercase tracking-widest"
+                >
+                  <Plus size={14} /> New Node
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-2 bg-[#10111a] border-white/10 rounded-2xl shadow-2xl text-zinc-200" align="end">
+                <div className="space-y-1">
+                  <button
+                    onClick={() => addBlock()}
+                    className="w-full text-left px-3 py-2 rounded-xl text-xs hover:bg-white/10 flex items-center gap-2 transition-colors"
+                  >
+                    <FileText className="w-4 h-4 text-zinc-400" />
+                    <span>Blank Sticky Note</span>
+                  </button>
+
+                  <div className="pt-1 border-t border-white/10">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 px-3 py-1 block">
+                      Link Research Note
+                    </span>
+                    <div className="max-h-48 overflow-y-auto custom-scrollbar space-y-1">
+                      {notes.map((n) => (
+                        <button
+                          key={n.id}
+                          onClick={() => addBlock(undefined, n.id)}
+                          className="w-full text-left px-3 py-1.5 rounded-xl text-xs hover:bg-purple-500/20 text-purple-300 flex items-center justify-between transition-colors truncate"
+                        >
+                          <span className="truncate pr-1">✨ {n.title || "Untitled"}</span>
+                        </button>
+                      ))}
+                      {notes.length === 0 && (
+                        <p className="text-[11px] text-zinc-500 px-3 py-1">No research notes found</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
             <button
               id="save-btn"
               onClick={handleSave}

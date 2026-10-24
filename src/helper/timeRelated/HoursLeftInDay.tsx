@@ -40,7 +40,7 @@ const HoursLeftInDay: React.FC<HoursLeftInDayProps> = ({ timeZone= "Asia/Kolkata
 
     // Cleanup the interval on component unmount
     return () => clearInterval(intervalId);
-  }, [timeZone]);
+  }, [timeZone, setHoursLeft]);
 
   return (
     <span>

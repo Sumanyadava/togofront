@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase";
-import { fetchAllFromFirebase } from "./state/state";
+import { fetchAllFromFirebase, themeAtom } from "./state/state";
+import { useAtom } from "jotai";
 
 import HomePage from "@/pages/home-page/HomePage";
 import NavBar from "@/components/NavBar";
@@ -17,15 +23,29 @@ import ShortList from "@/pages/short-list-page/ShortList";
 import ChallengePage from "@/pages/challenge-page/ChallengePage";
 import HabitPage from "@/pages/habit-page/HabitPage";
 import PlanPage from "@/pages/plan-page/PlanPage";
+import StartWritingPage from "@/pages/start-writing-page/StartWritingPage";
+import GraphPage from "@/pages/graph-page/GraphPage";
 
 // ── Protect private routes ──
-const ProtectedRoute = ({ children, user }: { children: JSX.Element; user: User | null }) => {
+const ProtectedRoute = ({
+  children,
+  user,
+}: {
+  children: JSX.Element;
+  user: User | null;
+}) => {
   if (!user) return <Navigate to="/login" replace />;
   return children;
 };
 
 // ── Redirect away from login if already authed ──
-const PublicRoute = ({ children, user }: { children: JSX.Element; user: User | null }) => {
+const PublicRoute = ({
+  children,
+  user,
+}: {
+  children: JSX.Element;
+  user: User | null;
+}) => {
   if (user) return <Navigate to="/" replace />;
   return children;
 };
@@ -33,20 +53,18 @@ const PublicRoute = ({ children, user }: { children: JSX.Element; user: User | n
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isDark] = useState(() => {
-    return localStorage.getItem("theme") === "true";
-  });
+  const [theme] = useAtom(themeAtom);
 
   useEffect(() => {
     const htmlElement = document.documentElement;
-    if (isDark) {
-      htmlElement.classList.remove("dark");
-      localStorage.setItem("theme", "true");
-    } else {
+    if (theme === "dark") {
       htmlElement.classList.add("dark");
-      localStorage.setItem("theme", "false");
+      localStorage.setItem("theme", "dark");
+    } else {
+      htmlElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
-  }, [isDark]);
+  }, [theme]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -69,22 +87,116 @@ const App = () => {
 
   return (
     <Router>
-      <div className="h-screen scrollbar-custom overflow-auto">
+      <div className="min-h-screen bg-background text-foreground scrollbar-custom">
         <NavBar />
         <Routes>
           {/* Public Routes */}
-          <Route path="/signup" element={<PublicRoute user={user}><Signup /></PublicRoute>} />
-          <Route path="/login" element={<PublicRoute user={user}><Login /></PublicRoute>} />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute user={user}>
+                <Signup />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute user={user}>
+                <Login />
+              </PublicRoute>
+            }
+          />
 
           {/* Protected Routes */}
-          <Route path="/" element={<ProtectedRoute user={user}><HomePage /></ProtectedRoute>} />
-          <Route path="/shortList/:id" element={<ProtectedRoute user={user}><ShortList /></ProtectedRoute>} />
-          <Route path="/LongProjects/:containerId" element={<ProtectedRoute user={user}><LongList /></ProtectedRoute>} />
-          <Route path="/LongProjects/:containerId/task/:taskId" element={<ProtectedRoute user={user}><LongTaskDetail /></ProtectedRoute>} />
-          <Route path="/timerapp" element={<ProtectedRoute user={user}><TimerApp /></ProtectedRoute>} />
-          <Route path="/challenge-page" element={<ProtectedRoute user={user}><ChallengePage /></ProtectedRoute>} />
-          <Route path="/habit-page" element={<ProtectedRoute user={user}><HabitPage /></ProtectedRoute>} />
-          <Route path="/plan-page" element={<ProtectedRoute user={user}><PlanPage /></ProtectedRoute>} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute user={user}>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shortList/:id"
+            element={
+              <ProtectedRoute user={user}>
+                <ShortList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/LongProjects/:containerId"
+            element={
+              <ProtectedRoute user={user}>
+                <LongList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/LongProjects/:containerId/task/:taskId"
+            element={
+              <ProtectedRoute user={user}>
+                <LongTaskDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/timerapp"
+            element={
+              <ProtectedRoute user={user}>
+                <TimerApp />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenge-page"
+            element={
+              <ProtectedRoute user={user}>
+                <ChallengePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/habit-page"
+            element={
+              <ProtectedRoute user={user}>
+                <HabitPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plan-page"
+            element={
+              <ProtectedRoute user={user}>
+                <PlanPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/startwriting"
+            element={
+              <ProtectedRoute user={user}>
+                <StartWritingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/startwriting/:id"
+            element={
+              <ProtectedRoute user={user}>
+                <StartWritingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/graph"
+            element={
+              <ProtectedRoute user={user}>
+                <GraphPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
       <Toaster richColors />

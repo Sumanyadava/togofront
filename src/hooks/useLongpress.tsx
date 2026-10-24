@@ -21,7 +21,7 @@ const useLongPress = <T extends HTMLElement = HTMLElement>(
   );
 
   const clear = useCallback(
-    (_e: Event) => {
+    () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -54,6 +54,7 @@ const useLongPress = <T extends HTMLElement = HTMLElement>(
     node.addEventListener('touchstart', start, { passive: false });
     node.addEventListener('mouseup', clear);
     node.addEventListener('mouseleave', cancel);
+    node.addEventListener('touchmove', cancel);
     node.addEventListener('touchend', clear);
     node.addEventListener('touchcancel', cancel);
 
@@ -63,6 +64,7 @@ const useLongPress = <T extends HTMLElement = HTMLElement>(
       node.removeEventListener('touchstart', start);
       node.removeEventListener('mouseup', clear);
       node.removeEventListener('mouseleave', cancel);
+      node.removeEventListener('touchmove', cancel);
       node.removeEventListener('touchend', clear);
       node.removeEventListener('touchcancel', cancel);
       

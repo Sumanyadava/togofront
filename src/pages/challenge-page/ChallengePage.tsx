@@ -58,7 +58,7 @@ const ChallengePage = () => {
       setNewDesc("");
       setNewDuration(30);
       toast.success("Challenge Started!");
-    } catch (e) {
+    } catch {
       toast.error("Failed to start challenge");
     }
   };
@@ -92,7 +92,7 @@ const ChallengePage = () => {
       await setDoc(doc(db, `users/${userId}/challenges`, updated.id), updated);
       setChallenges(prev => prev.map(c => c.id === updated.id ? updated : c));
       if (updated.status !== "completed") toast.success("Checked in for today! Keep it up!");
-    } catch(e) {
+    } catch {
       toast.error("Failed to check in");
     }
   };
@@ -107,7 +107,7 @@ const ChallengePage = () => {
       await setDoc(doc(db, `users/${userId}/challenges`, updated.id), updated);
       setChallenges(prev => prev.map(c => c.id === updated.id ? updated : c));
       toast.error("Challenge marked as failed. Don't give up next time!");
-    } catch(e) {
+    } catch {
       toast.error("Failed to update challenge");
     }
   };
@@ -248,21 +248,22 @@ const ChallengePage = () => {
 // --- Sub Components ---
 
 const ActiveChallengeCard = ({ challenge, onCheckIn }: { challenge: Challenge, onCheckIn: () => void }) => {
-  const start = startOfDay(challenge.startDate);
-  const now = new Date();
+  const start = useMemo(() => startOfDay(challenge.startDate), [challenge.startDate]);
+  const now = useMemo(() => new Date(), []);
+  const todayStr = useMemo(() => format(now, "yyyy-MM-dd"), [now]);
   const currentDayIndex = differenceInDays(now, start);
-  const todayStr = format(now, "yyyy-MM-dd");
   const isCheckedInToday = challenge.completedDates.includes(todayStr);
 
   const progressPct = Math.round((challenge.completedDates.length / challenge.durationDays) * 100);
 
   // Generate grid cells
   const cells = useMemo(() => {
+    const todayStart = startOfDay(now);
     return Array.from({ length: challenge.durationDays }).map((_, i) => {
       const cellDate = addDays(start, i);
       const cellDateStr = format(cellDate, "yyyy-MM-dd");
       const isCompleted = challenge.completedDates.includes(cellDateStr);
-      const isPast = isBefore(cellDate, startOfDay(now));
+      const isPast = isBefore(cellDate, todayStart);
       const isToday = isSameDay(cellDate, now);
 
       let status: "completed" | "missed" | "future" | "today" = "future";
@@ -272,7 +273,7 @@ const ActiveChallengeCard = ({ challenge, onCheckIn }: { challenge: Challenge, o
 
       return { index: i + 1, status, date: cellDateStr };
     });
-  }, [challenge, start, now]);
+  }, [challenge.completedDates, challenge.durationDays, start, now]);
 
   return (
     <div className="w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden backdrop-blur-xl">
@@ -363,7 +364,7 @@ const PastChallengeCard = ({ challenge }: { challenge: Challenge }) => {
       await deleteDoc(doc(db, `users/${userId}/challenges`, challenge.id));
       setChallenges((prev) => prev.filter(c => c.id !== challenge.id));
       toast.success("Record deleted");
-    } catch(e) {
+    } catch {
       toast.error("Failed to delete");
     }
   };

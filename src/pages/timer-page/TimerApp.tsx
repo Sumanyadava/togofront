@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { storage, db } from "@/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, Timestamp } from "firebase/firestore";
 import { Upload, Image as ImageIcon, Loader2, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 interface UploadedImage {
   id: string;
   url: string;
-  createdAt: any;
+  createdAt?: Timestamp | Date | null;
   name: string;
 }
 

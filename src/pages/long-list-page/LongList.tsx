@@ -13,7 +13,7 @@ import {
 import { Pen} from "lucide-react";
 
 const LongList = () => {
-  const [todoView] = useState<String>("block");
+  const [todoView] = useState<string>("block");
 
   const { containerId } = useParams();
 

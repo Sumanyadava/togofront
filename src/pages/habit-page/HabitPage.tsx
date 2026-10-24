@@ -71,7 +71,7 @@ const HabitPage = () => {
       setNewTitle("");
       setNewDesc("");
       toast.success("Habit Created!");
-    } catch (e) {
+    } catch {
       toast.error("Failed to create habit");
     }
   };
@@ -228,7 +228,7 @@ const HabitCard = ({ habit }: { habit: Habit }) => {
       if (!isCompletedToday) {
         toast.success(`Nailed it! ${habit.title} completed for today.`);
       }
-    } catch (e) {
+    } catch {
       toast.error("Failed to update habit");
     }
   };
@@ -240,7 +240,7 @@ const HabitCard = ({ habit }: { habit: Habit }) => {
       await deleteDoc(doc(db, `users/${userId}/habits`, habit.id));
       setHabits(prev => prev.filter(h => h.id !== habit.id));
       toast.success("Habit deleted");
-    } catch (e) {
+    } catch {
       toast.error("Failed to delete habit");
     }
   };

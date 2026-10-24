@@ -2,79 +2,85 @@
 
 import Searchbar from "@/components/Searchbar";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Habbits } from "./Habbits";
 import { AvatarWithNotification } from "@/components/ui/avatar-with-notification";
-
-// import LongTaskUi from "@/components/TodoRelated/LongTask/LongTaskUi";
-// import ShortTaskUi from "@/components/TodoRelated/ShortTaskUi";
-import { LogOut, User as UserIcon, Settings, Bell } from "lucide-react";
+import { LogOut, User as UserIcon, Settings, Bell, Sun, Moon, CalendarDays, Activity, PenTool, Share2 } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase";
 import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { themeAtom } from "@/state/state";
 
 const HeaderHome = () => {
   const navigate = useNavigate();
-  const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem("theme") === "true";
-  });
-
-  useEffect(() => {
-    const htmlElement = document.documentElement;
-
-    if (isDark) {
-      htmlElement.classList.remove("dark");
-      localStorage.setItem("theme", "true");
-    } else {
-      htmlElement.classList.add("dark");
-      localStorage.setItem("theme", "false");
-    }
-  }, [isDark]);
+  const [theme, setTheme] = useAtom(themeAtom);
 
   const toggleDarkMode = () => {
-    setIsDark(!isDark);
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   return (
-    <div className="search_here  flex justify-between items-center border flex-col md:flex-row gap-5 p-5">
+    <div className="search_here flex justify-between items-center border-b border-white/5 flex-col md:flex-row gap-5 p-5 bg-background/50 backdrop-blur-md">
       <Button
         variant={"ghost"}
-        className="mx-5 text-xl"
+        className="mx-5 text-xl font-bold flex items-center gap-2 group"
         onClick={toggleDarkMode}
+        title="Toggle Theme"
       >
-        Togo.V2
+        <span>Togo.V2</span>
+        {theme === "dark" ? (
+          <Sun className="w-4 h-4 text-amber-400 transition-transform group-hover:rotate-45" />
+        ) : (
+          <Moon className="w-4 h-4 text-blue-500 transition-transform group-hover:-rotate-12" />
+        )}
       </Button>
 
       <Searchbar />
 
-      <div className="flex gap-5 mx-5">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button onClick={() => navigate('/plan-page')}>Week</Button>
-          </PopoverTrigger>
-          <PopoverContent>Deadline -{/* <LongTaskUi /> */}</PopoverContent>
-        </Popover>
+      <div className="flex items-center gap-2 mx-5">
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-xl flex items-center gap-1.5 border-purple-500/30 bg-purple-500/10 text-purple-300 hover:bg-purple-500/20"
+          onClick={() => navigate("/startwriting")}
+        >
+          <PenTool className="w-3.5 h-3.5 text-purple-400" />
+          <span>Write</span>
+        </Button>
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button>Habbits</Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            Habbits -{/* <LongTaskUi /> */}
-            
-            {/* <LongTaskUi /> */}
-            <Button onClick={() => navigate('/habit-page')}>Habits Page</Button>
-            
-          </PopoverContent>
-        </Popover>
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-xl flex items-center gap-1.5 border-white/10 hover:bg-white/5"
+          onClick={() => navigate("/graph")}
+        >
+          <Share2 className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Graph</span>
+        </Button>
 
-        <Habbits />
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-xl flex items-center gap-1.5 border-white/10 hover:bg-white/5"
+          onClick={() => navigate("/plan-page")}
+        >
+          <CalendarDays className="w-3.5 h-3.5 text-blue-400" />
+          <span>Plans</span>
+        </Button>
+
+        <Button
+          variant="outline"
+          size="sm"
+          className="rounded-xl flex items-center gap-1.5 border-white/10 hover:bg-white/5"
+          onClick={() => navigate("/habit-page")}
+        >
+          <Activity className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Habits</span>
+        </Button>
         <Popover>
           <PopoverTrigger asChild>
             <div className="cursor-pointer group">
