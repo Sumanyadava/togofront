@@ -20,7 +20,7 @@ const HomePage = () => {
   const [shortTodoContainers] = useAtom(shortTodoContainerAtom);
   const [LongTodoContainer] = useAtom(LongTodoContainerAtom);
 
-  const [todoParts, setTodoParts] = useState(3);
+  const [todoParts] = useState(3);
   const [todoPage, setTodoPage] = useState(1);
 
   const combineTodo = [

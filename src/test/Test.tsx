@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const Test = () => {
 
@@ -15,7 +15,7 @@ const Test = () => {
         91, 92, 93, 94, 95, 96, 97, 98, 99, 100
     ];
 
-    const [parts, setParts] = useState(8);
+    const [parts] = useState(8);
     const [pages, setPages] = useState(2);
 
     let lastIndex = pages * parts;
