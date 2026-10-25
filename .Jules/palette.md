@@ -1,0 +1,3 @@
+## 2024-05-15 - Ambiguous Buttons and Missing Accessibility Attributes
+**Learning:** Found a pattern of buttons using single letters ("L", "S") without descriptive text, `aria-labels`, or `title` attributes, making the interface confusing for sighted users and inaccessible to screen readers.
+**Action:** Always add descriptive `title` and `aria-label` to buttons that lack clear visible text. Ensure input fields always have meaningful placeholders.

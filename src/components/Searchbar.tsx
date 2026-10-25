@@ -69,9 +69,9 @@ const Searchbar = () => {
   }
   return (
     <div className='border rounded-lg flex gap-2 p-2  md:w-[50%]'>
-      <input type="text" name="" id="" className='bg-inherit focus:outline-none w-full' value={searchText} onChange={e => setSearchText(e.target.value)}/>
-      <Button variant={"outline"} onClick={handleLongContainer}>L</Button>
-      <Button onClick={handleShortContainer}>S</Button>
+      <input type="text" name="" id="" className='bg-inherit focus:outline-none w-full' value={searchText} onChange={e => setSearchText(e.target.value)} placeholder="Container name..." aria-label="Container name" />
+      <Button variant={"outline"} onClick={handleLongContainer} aria-label="Add Long Term Container" title="Add Long Term Container">L</Button>
+      <Button onClick={handleShortContainer} aria-label="Add Short Term Container" title="Add Short Term Container">S</Button>
     </div>
   )
 }
