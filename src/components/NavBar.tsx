@@ -28,7 +28,7 @@ const NavBar = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="fixed right-10 bottom-10 z-50 shadow-2xl" asChild>
-        <Button size={"icon"} className="rounded-full w-12 h-12 bg-primary/90 hover:bg-primary shadow-lg backdrop-blur-md">
+        <Button size={"icon"} aria-label="Toggle navigation menu" className="rounded-full w-12 h-12 bg-primary/90 hover:bg-primary shadow-lg backdrop-blur-md">
           <Radar className="w-5 h-5" />
         </Button>
       </SheetTrigger>
