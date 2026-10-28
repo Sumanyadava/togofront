@@ -68,10 +68,36 @@ const Searchbar = () => {
     }
   }
   return (
-    <div className='border rounded-lg flex gap-2 p-2  md:w-[50%]'>
-      <input type="text" name="" id="" className='bg-inherit focus:outline-none w-full' value={searchText} onChange={e => setSearchText(e.target.value)}/>
-      <Button variant={"outline"} onClick={handleLongContainer}>L</Button>
-      <Button onClick={handleShortContainer}>S</Button>
+    <div className='border rounded-lg flex gap-2 p-2 md:w-[50%] focus-within:ring-2 focus-within:ring-ring transition-shadow'>
+      <input
+        type="text"
+        name="search"
+        id="search"
+        placeholder="List/Project name..."
+        className='bg-inherit focus:outline-none w-full'
+        value={searchText}
+        onChange={e => setSearchText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleShortContainer();
+          }
+        }}
+      />
+      <Button
+        variant={"outline"}
+        onClick={handleLongContainer}
+        title="Add Long Project"
+        aria-label="Add Long Project"
+      >
+        L
+      </Button>
+      <Button
+        onClick={handleShortContainer}
+        title="Add Short List"
+        aria-label="Add Short List"
+      >
+        S
+      </Button>
     </div>
   )
 }
