@@ -241,6 +241,7 @@ const ShortTaskUi: React.FC<ShortTaskUiProps> = ({
             <button
               onClick={(e) => { e.stopPropagation(); startEdit(); }}
               title="Rename"
+              aria-label="Rename task"
               className="p-2 rounded-md hover:bg-white/10 text-white/70 hover:text-white transition-all transform active:scale-90"
             >
               <SquarePen size={16} />
@@ -248,6 +249,7 @@ const ShortTaskUi: React.FC<ShortTaskUiProps> = ({
             <button
               onClick={(e) => { e.stopPropagation(); handleHide(); }}
               title="Hide"
+              aria-label="Hide task"
               className="p-2 rounded-md hover:bg-white/10 text-white/70 hover:text-white transition-all transform active:scale-90"
             >
               <EyeOff size={16} />
@@ -255,6 +257,7 @@ const ShortTaskUi: React.FC<ShortTaskUiProps> = ({
             <button
               onClick={(e) => { e.stopPropagation(); handleDelete(); }}
               title="Delete"
+              aria-label="Delete task"
               className="p-2 rounded-md hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all transform active:scale-90"
             >
               <Trash2 size={16} />
