@@ -1,0 +1,3 @@
+## 2024-05-18 - Icon-Only Buttons Missing ARIA Labels
+**Learning:** Found multiple instances of icon-only buttons across the app (NavBar, TodayCard, GraphPage, ChallengePage, HabitPage, PlanPage, StartWritingPage, LongTodo) missing `aria-label` attributes. This makes navigation and interaction difficult for screen reader users, as these buttons will only be announced as "button" or by the inner SVG content, which is often unhelpful or confusing.
+**Action:** Always add descriptive `aria-label` attributes to `Button` components that only contain icons (like `<ArrowLeft>`, `<Settings>`, `<Radar>`, etc.). This is a critical accessibility improvement for the design system's pattern of using `size="icon"` buttons.
