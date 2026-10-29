@@ -200,12 +200,14 @@ const LongTaskUi: React.FC<LongTaskUiProps> = ({
                  >
                    <button
                      onClick={(e) => { e.stopPropagation(); startEdit(); }}
+                     aria-label="Edit goal"
                      className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-all"
                    >
                      <SquarePen size={14} />
                    </button>
                    <button
                      onClick={(e) => { e.stopPropagation(); handleDelete(); }}
+                     aria-label="Delete goal"
                      className="p-2 rounded-lg hover:bg-red-500/20 text-red-400/80 hover:text-red-400 transition-all"
                    >
                      <Trash2 size={14} />
