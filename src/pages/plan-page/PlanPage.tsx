@@ -92,7 +92,7 @@ const PlanPage = () => {
       <div className="flex items-center justify-between mb-8 relative z-10 flex-shrink-0">
         <div className="flex items-center gap-4">
           <Link to="/">
-            <Button variant="ghost" size="icon" className="h-10 w-10 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl">
+              <Button variant="ghost" size="icon" aria-label="Back to Home" className="h-10 w-10 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl">
               <ArrowLeft className="h-5 w-5 text-white/70" />
             </Button>
           </Link>

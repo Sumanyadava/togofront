@@ -230,6 +230,7 @@ const TodayCard: React.FC = () => {
       <PopoverTrigger asChild>
         <Button 
           size="icon" 
+          aria-label={isCardVisible ? "Close Today's Focus" : "Open Today's Focus"}
           className={`relative w-14 h-14 rounded-full shadow-2xl transition-all duration-500 overflow-hidden ${
             isCardVisible 
               ? "bg-white/20 backdrop-blur-xl scale-90" 
@@ -297,7 +298,7 @@ const TodayCard: React.FC = () => {
                 </div>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="rounded-full w-8 h-8 text-white/30 hover:text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" aria-label="Settings" className="rounded-full w-8 h-8 text-white/30 hover:text-white hover:bg-white/10">
               <Settings className="w-4 h-4" />
             </Button>
           </div>
